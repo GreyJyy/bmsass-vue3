@@ -15,7 +15,7 @@ import {
         :model="form"
         :rules="rules"
         ref="ruleFormRef"
-        label-width="auto"
+        label-width="120px"
         size="large"
         status-icon
       >
@@ -23,7 +23,7 @@ import {
           ><el-input v-model="form.username"></el-input
         ></el-form-item>
         <el-form-item label="密码" prop="password"
-          ><el-input v-model="form.password"></el-input
+          ><el-input v-model="form.password" show-password></el-input
         ></el-form-item>
         <el-form-item class="btns">
           <el-button
@@ -50,7 +50,7 @@ import {
   justify-content: center;
   align-items: flex-start;
   .form-box {
-    width: 450px;
+    width: 400px;
     height: 250px;
     padding: 30px 15px;
     margin-top: 120px;

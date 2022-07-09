@@ -2,6 +2,8 @@ import { loginAPI } from '@/api/user'
 import { loginReq } from '@/types/user'
 import { defineStore } from 'pinia'
 import { ElMessage } from 'element-plus'
+import Vrouter from '@/router'
+const router = Vrouter
 const useUserStore = defineStore('user', {
   state: () => {
     return { token: '' }
@@ -16,13 +18,14 @@ const useUserStore = defineStore('user', {
             message: '用户名不存在或密码错误',
             type: 'warning'
           })
-          return
+        } else {
+          this.token = res.data.token
+          ElMessage({
+            message: '登录成功',
+            type: 'success'
+          })
+          router.replace('/')
         }
-        this.token = res.data.token
-        ElMessage({
-          message: '登录成功',
-          type: 'success'
-        })
       } catch (error) {
         console.log(error)
         ElMessage({
