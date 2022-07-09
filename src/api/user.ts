@@ -1,6 +1,7 @@
 import request from '@/utils/request'
+import { loginReq } from '@/types/user'
 
-const loginAPI = (data: any) =>
+export const loginAPI = (data: loginReq) =>
   request({
     url: 'login',
     method: 'POST',

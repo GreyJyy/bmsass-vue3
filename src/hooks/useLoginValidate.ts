@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
-import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
+import useStore from '@/store'
 export const ruleFormRef = ref<FormInstance>()
 export const form = reactive({
   username: '',
@@ -19,11 +19,10 @@ export const rules = reactive<FormRules>({
 export const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
-    if (valid)
-      ElMessage({
-        message: '登录成功',
-        type: 'success'
-      })
+    if (valid) {
+      const { user } = useStore()
+      user.login({ username: form.username, password: form.password })
+    }
   })
 }
 export const resetForm = (formEl: FormInstance | undefined) => {
