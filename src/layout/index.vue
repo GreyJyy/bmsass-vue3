@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" name="layout">
 import TopBar from '@/layout/components/TopBar/index.vue'
 import SideBar from '@/layout/components/SideBar/index.vue'
 import useCollapseToggle from '@/hooks/useCollapseToggle'

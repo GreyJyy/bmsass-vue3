@@ -1,9 +1,11 @@
-<script setup lang="ts">
+<script setup lang="ts" name="users">
 import { tableItem } from '@/types/permission'
 import { changeUserStatusAPI } from '@/api/user'
 import BreadCrumb from '@/components/BreadCrumb/index.vue'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
 import useSearch from '@/hooks/useSearch'
+import JyDialog from '@/components/JyDialog/index.vue'
+import useAddUser from '@/hooks/useAddUser'
 
 //searchById
 const { getUserList, searchById, tableData, query } = useSearch()
@@ -23,9 +25,18 @@ const handleDel = () => {
 const handleRights = () => {
   console.log('handleRights')
 }
+
+//to add the new user
+const { dialogFormVisible, form, hideDialog, addNewUser } = useAddUser()
 </script>
 
 <template>
+  <jy-dialog
+    :form="form"
+    :dialogFormVisible="dialogFormVisible"
+    @hideDialog="hideDialog"
+    @addNewUser="addNewUser"
+  ></jy-dialog>
   <bread-crumb :index="0" :second-index="0"></bread-crumb>
   <el-card class="box-card" style="margin-top: 20px">
     <template #header>
@@ -38,7 +49,12 @@ const handleRights = () => {
           :suffix-icon="Search"
           @input="searchById"
         />
-        <el-button type="primary" style="height: 38px">添加用户</el-button>
+        <el-button
+          type="primary"
+          style="height: 38px"
+          @click="dialogFormVisible = true"
+          >添加用户</el-button
+        >
       </div>
     </template>
     <div class="table">

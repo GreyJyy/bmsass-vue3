@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" name="sidebar">
 import useStore from '@/store'
 
 import useIcons from '@/hooks/useIcons'

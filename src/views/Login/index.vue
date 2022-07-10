@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" name="login">
 import { useLoginValidate } from '@/hooks/useLoginValidate'
 
 //to validate the login form
@@ -20,7 +20,11 @@ const { form, rules, ruleFormRef, submitForm, resetForm } = useLoginValidate()
           ><el-input v-model="form.username"></el-input
         ></el-form-item>
         <el-form-item label="密码" prop="password"
-          ><el-input v-model="form.password" show-password></el-input
+          ><el-input
+            v-model="form.password"
+            show-password
+            @keyup.enter="submitForm(ruleFormRef)"
+          ></el-input
         ></el-form-item>
         <el-form-item class="btns">
           <el-button

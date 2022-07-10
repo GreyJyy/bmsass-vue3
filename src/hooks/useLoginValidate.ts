@@ -3,20 +3,22 @@ import type { FormInstance, FormRules } from 'element-plus'
 import useStore from '@/store'
 export const useLoginValidate = () => {
   const ruleFormRef = ref<FormInstance>()
-  const form = reactive({
+  const baseAttrs = {
     username: '',
     password: ''
-  })
-  const rules = reactive<FormRules>({
+  }
+  const form = reactive(baseAttrs)
+  const baseRules = {
     username: [
       { required: true, trigger: 'blur', message: '用户名不能为空' },
-      { min: 3, max: 8, trigger: 'blur', message: '用户名长度为3至8个字符' }
+      { min: 2, max: 7, trigger: 'blur', message: '用户名长度为2至7个字符' }
     ],
     password: [
       { required: true, trigger: 'blur', message: '密码不能为空' },
-      { min: 3, max: 8, trigger: 'blur', message: '密码长度为3至8个字符' }
+      { min: 2, max: 7, trigger: 'blur', message: '密码长度为2至7个字符' }
     ]
-  })
+  }
+  const rules = reactive<FormRules>(baseRules)
   const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid) => {
@@ -30,5 +32,13 @@ export const useLoginValidate = () => {
     if (!formEl) return
     formEl.resetFields()
   }
-  return { form, rules, ruleFormRef, submitForm, resetForm }
+  return {
+    form,
+    rules,
+    ruleFormRef,
+    baseRules,
+    baseAttrs,
+    submitForm,
+    resetForm
+  }
 }
