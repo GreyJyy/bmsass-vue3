@@ -3,11 +3,12 @@ import { loginReq } from '@/types/user'
 import { defineStore } from 'pinia'
 import { ElMessage } from 'element-plus'
 import { getSideMenuAPI } from '@/api/permission'
+import { SideMenuItem } from '@/types/permission'
 import Vrouter from '@/router'
 const router = Vrouter
 const useUserStore = defineStore('user', {
   state: () => {
-    return { token: '', menuList: [] }
+    return { token: '', menuList: [] as SideMenuItem[] }
   },
   getters: {},
   actions: {
@@ -47,6 +48,9 @@ const useUserStore = defineStore('user', {
       }
     }
   },
-  persist: true
+  persist: {
+    paths: ['token']
+  }
+  // persist: true
 })
 export default useUserStore

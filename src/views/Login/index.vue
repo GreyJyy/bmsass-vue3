@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useLoginValidate } from '@/hooks/useLoginValidate'
+
+//to validate the login form
 const { form, rules, ruleFormRef, submitForm, resetForm } = useLoginValidate()
 </script>
 
@@ -39,7 +41,7 @@ const { form, rules, ruleFormRef, submitForm, resetForm } = useLoginValidate()
 <style scoped lang="less">
 .container {
   width: 100vw;
-  height: 100vw;
+  height: 569px;
   background-color: #2b4b6b;
   display: flex;
   justify-content: center;

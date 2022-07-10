@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import useStore from '@/store'
-import { ref } from 'vue'
-import { SideMenuItem } from '@/types/permission'
+
+import useIcons from '@/hooks/useIcons'
+const { icons, House } = useIcons() //to render the sideBar's icons
+
+const { user } = useStore()
 const { isCollapse, activePath } = defineProps<{
   isCollapse: boolean
   activePath: string
 }>()
 const emit = defineEmits<{ (e: 'toggleCollapse'): void }>()
 const toggleCollapse = () => emit('toggleCollapse')
-const { user } = useStore()
-const menuList = ref<SideMenuItem[]>(user.menuList)
 </script>
 
 <template>
@@ -29,17 +30,20 @@ const menuList = ref<SideMenuItem[]>(user.menuList)
     >
       <el-sub-menu
         :index="`${index}`"
-        v-for="(item, index) in menuList"
+        v-for="(item, index) in user.menuList"
         :key="item.id"
       >
         <template #title>
+          <el-icon><component :is="icons[index][index]" /></el-icon>
           <span>{{ item.authName }}</span>
         </template>
         <el-menu-item
           :index="`/${child.path}`"
           v-for="child in item.children"
           :key="child.id"
-          >{{ child.authName }}</el-menu-item
+        >
+          <el-icon><House /></el-icon>
+          {{ child.authName }}</el-menu-item
         >
       </el-sub-menu>
     </el-menu>

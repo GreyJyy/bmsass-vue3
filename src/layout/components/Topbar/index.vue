@@ -3,6 +3,8 @@ import useStore from '@/store'
 import { useRouter } from 'vue-router'
 const { user } = useStore()
 const router = useRouter()
+
+//logout ->remove token and go to the login page
 const logout = () => {
   user.$patch((state) => (state.token = ''))
   router.replace('/login')

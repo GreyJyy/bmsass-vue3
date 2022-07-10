@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import TopBar from '@/layout/components/TopBar/index.vue'
 import SideBar from '@/layout/components/SideBar/index.vue'
-import useStore from '@/store'
-import { ref } from 'vue'
-const isCollapse = ref(false)
-const activePath = ref('0')
-const toggleCollapse = () => {
-  isCollapse.value = !isCollapse.value
-}
-const { user } = useStore()
-user.getSideMenu()
+import useCollapseToggle from '@/hooks/useCollapseToggle'
+
+//to control the Collapse toggle
+const { isCollapse, activePath, toggleCollapse } = useCollapseToggle()
 </script>
 
 <template>

@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { tableItem } from '@/types/permission'
+import { changeUserStatusAPI } from '@/api/user'
 import BreadCrumb from '@/components/BreadCrumb/index.vue'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
-const input1 = ref('')
-const tableData = [
-  {
-    date: '1',
-    name: 'Tom',
-    mobile: '11112321312',
-    roles: '管理员'
-  }
-]
-const value1 = ref(false)
+import useSearch from '@/hooks/useSearch'
+
+//searchById
+const { getUserList, searchById, tableData, query } = useSearch()
+
+getUserList() //to init the list
+
+// to change the user's status
+const changeStatus = async (row: tableItem) => {
+  await changeUserStatusAPI(row.id, row['mg_state'])
+}
 const handleEdit = () => {
   console.log('handleEdit')
 }
@@ -29,23 +31,26 @@ const handleRights = () => {
     <template #header>
       <div class="card-header">
         <el-input
-          v-model="input1"
+          v-model="query"
           size="large"
           style="width: 318px; margin-right: 20px"
           placeholder="请输入内容"
           :suffix-icon="Search"
+          @input="searchById"
         />
         <el-button type="primary" style="height: 38px">添加用户</el-button>
       </div>
     </template>
     <div class="table">
       <el-table border :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="date" label="#" width="180" />
-        <el-table-column prop="name" label="姓名" width="180" />
+        <el-table-column prop="index" label="#" width="180" />
+        <el-table-column prop="username" label="姓名" width="180" />
         <el-table-column prop="mobile" label="电话" />
-        <el-table-column prop="roles" label="角色" />
+        <el-table-column prop="role_name" label="角色" />
         <el-table-column label="状态">
-          <template #default><el-switch v-model="value1" /></template>
+          <template #default="{ row }"
+            ><el-switch v-model="row['mg_state']" @change="changeStatus(row)"
+          /></template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="180">
           <template #default>
