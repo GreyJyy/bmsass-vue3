@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import TopBar from '@/layout/components/TopBar/index.vue'
 import SideBar from '@/layout/components/SideBar/index.vue'
+import { getSideMenuAPI } from '@/api/permission'
 import { ref, reactive } from 'vue'
-const menuList = reactive([])
-const iconsObj = reactive({
-  '125': 'iconfont icon-yonghu1',
-  '103': 'iconfont icon-quanxian',
-  '101': 'iconfont icon-shangpin',
-  '102': 'iconfont icon-dingdan2',
-  '145': 'iconfont icon-icon_huabanfuben'
-})
+const menuList = ref([])
+const getSideMenu = async () => {
+  const res = await getSideMenuAPI()
+  menuList.value = res.data
+}
+getSideMenu()
 const isCollapse = ref(false)
-const activePath = ref('')
+const activePath = ref('0')
 const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value
 }
@@ -24,6 +23,7 @@ const toggleCollapse = () => {
       <side-bar
         :activePath="activePath"
         :isCollapse="isCollapse"
+        :menuList="menuList"
         @toggleCollapse="toggleCollapse"
       ></side-bar>
       <!-- 右侧内容 -->

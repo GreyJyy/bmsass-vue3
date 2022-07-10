@@ -10,6 +10,7 @@ const useUserStore = defineStore('user', {
   },
   getters: {},
   actions: {
+    //login validate and set token to localStorage
     async login(data: loginReq) {
       try {
         const res = await loginAPI(data)

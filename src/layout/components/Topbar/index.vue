@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import useStore from '@/store'
 import { useRouter } from 'vue-router'
+const { user } = useStore()
 const router = useRouter()
 const logout = () => {
+  user.$patch((state) => (state.token = ''))
   router.replace('/login')
 }
 </script>

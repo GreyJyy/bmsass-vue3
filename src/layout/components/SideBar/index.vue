@@ -1,14 +1,16 @@
 <script setup lang="ts">
-const props = defineProps({
-  isCollapse: Boolean,
-  activePath: String
-})
-const emit = defineEmits(['toggleCollapse'])
+import { SideMenuItem } from '@/types/permission'
+const { isCollapse, activePath, menuList } = defineProps<{
+  isCollapse: boolean
+  activePath: string
+  menuList: SideMenuItem[]
+}>()
+const emit = defineEmits<{ (e: 'toggleCollapse'): void }>()
 const toggleCollapse = () => emit('toggleCollapse')
 </script>
 
 <template>
-  <el-aside :width="props.isCollapse ? '64px' : '200px'">
+  <el-aside :width="isCollapse ? '64px' : '200px'">
     <div class="toggle-button" @click="toggleCollapse">|||</div>
     <!-- 侧边栏菜单区域 -->
     <el-menu
@@ -16,17 +18,26 @@ const toggleCollapse = () => emit('toggleCollapse')
       text-color="#fff"
       active-text-color="#409EFF"
       unique-opened
-      :collapse="props.isCollapse"
+      :collapse="isCollapse"
       :collapse-transition="false"
       :router="true"
-      :default-active="props.activePath"
+      :default-active="activePath"
+      router
     >
-      <el-sub-menu index="1">
+      <el-sub-menu
+        :index="`${index}`"
+        v-for="(item, index) in menuList"
+        :key="item.id"
+      >
         <template #title>
-          <el-icon><location /></el-icon>
-          <span>Navigator One</span>
+          <span>{{ item.authName }}</span>
         </template>
-        <el-menu-item index="1-1">item one</el-menu-item>
+        <el-menu-item
+          :index="`/${child.path}`"
+          v-for="child in item.children"
+          :key="child.id"
+          >{{ child.authName }}</el-menu-item
+        >
       </el-sub-menu>
     </el-menu>
   </el-aside>

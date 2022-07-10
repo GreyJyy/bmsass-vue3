@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import {
-  ruleFormRef,
-  form,
-  rules,
-  submitForm,
-  resetForm
-} from '@/hooks/useLoginValidate'
+import { useLoginValidate } from '@/hooks/useLoginValidate'
+const { form, rules, ruleFormRef, submitForm, resetForm } = useLoginValidate()
 </script>
 
 <template>
