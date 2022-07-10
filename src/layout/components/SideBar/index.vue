@@ -1,61 +1,54 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting
-} from '@element-plus/icons-vue'
-
-const isCollapse = ref(true)
-const toggleCollapse = () => {
-  isCollapse.value = !isCollapse.value
-}
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
+const props = defineProps({
+  isCollapse: Boolean,
+  activePath: String
+})
+const emit = defineEmits(['toggleCollapse'])
+const toggleCollapse = () => emit('toggleCollapse')
 </script>
 
 <template>
-  <div
-    class="toggle-button"
-    @click="toggleCollapse"
-    :style="{ width: isCollapse ? '63px' : '199px' }"
-  >
-    |||
-  </div>
-  <el-menu
-    default-active="2"
-    style="background-color: #424243"
-    class="el-menu-vertical-demo"
-    :collapse="isCollapse"
-    @open="handleOpen"
-    @close="handleClose"
-    :collapse-transition="false"
-  >
-    <el-sub-menu index="1">
-      <template #title>
-        <el-icon><location /></el-icon>
-        <span style="color: #fff">Navigator One</span>
-      </template>
-      <el-menu-item-group style="background-color: #424243">
-        <el-menu-item index="1-1" style="color: #fff">item one</el-menu-item>
-      </el-menu-item-group>
-    </el-sub-menu>
-  </el-menu>
+  <el-aside :width="props.isCollapse ? '64px' : '200px'">
+    <div class="toggle-button" @click="toggleCollapse">|||</div>
+    <!-- 侧边栏菜单区域 -->
+    <el-menu
+      background-color="#333744"
+      text-color="#fff"
+      active-text-color="#409EFF"
+      unique-opened
+      :collapse="props.isCollapse"
+      :collapse-transition="false"
+      :router="true"
+      :default-active="props.activePath"
+    >
+      <el-sub-menu index="1">
+        <template #title>
+          <el-icon><location /></el-icon>
+          <span>Navigator One</span>
+        </template>
+        <el-menu-item index="1-1">item one</el-menu-item>
+      </el-sub-menu>
+    </el-menu>
+  </el-aside>
 </template>
 
-<style scoped>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
-}
+<style scoped lang="less">
 .toggle-button {
-  text-align: center;
+  background-color: #4a5064;
+  font-size: 10px;
+  line-height: 24px;
   color: #fff;
-  background-color: #424243;
+  text-align: center;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+}
+.iconfont {
+  margin-right: 10px;
+}
+.el-aside {
+  background-color: #333744;
+  .el-menu {
+    border-right: none;
+  }
 }
 </style>

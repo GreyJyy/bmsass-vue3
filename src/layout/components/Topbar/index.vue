@@ -2,27 +2,34 @@
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const logout = () => {
-  router.replace('/')
+  router.replace('/login')
 }
 </script>
 
 <template>
-  <el-row justify="space-between" align="middle">
-    <el-col :span="18" class="title">Fast Coding Company</el-col>
-    <el-col :span="6"
-      ><el-row justify="end" style="margin-top: 14px"
-        ><el-button type="primary" @click="logout">退出</el-button></el-row
-      ></el-col
-    >
-  </el-row>
+  <el-header>
+    <el-button type="info" @click="logout">退出</el-button>
+  </el-header>
 </template>
 
-<style scoped>
-.el-col {
-  height: 60px;
+<style scoped lang="less">
+.el-header {
+  background-color: #373d41;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0;
+  align-items: center;
+  color: #fff;
+  font-size: 20px;
+  > div {
+    display: flex;
+    align-items: center;
+    span {
+      margin-left: 15px;
+    }
+  }
 }
-.title {
-  font-size: 24px;
-  line-height: 60px;
+.el-button {
+  margin-left: 1100px;
 }
 </style>
