@@ -1,5 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BreadCrumb from '@/components/BreadCrumb/index.vue'
+</script>
 
-<template><div>角色列表</div></template>
+<template>
+  <bread-crumb :index="1" :second-index="0"></bread-crumb>
+</template>
 
 <style scoped lang="less"></style>

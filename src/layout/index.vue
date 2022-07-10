@@ -1,19 +1,15 @@
 <script setup lang="ts">
 import TopBar from '@/layout/components/TopBar/index.vue'
 import SideBar from '@/layout/components/SideBar/index.vue'
-import { getSideMenuAPI } from '@/api/permission'
-import { ref, reactive } from 'vue'
-const menuList = ref([])
-const getSideMenu = async () => {
-  const res = await getSideMenuAPI()
-  menuList.value = res.data
-}
-getSideMenu()
+import useStore from '@/store'
+import { ref } from 'vue'
 const isCollapse = ref(false)
 const activePath = ref('0')
 const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value
 }
+const { user } = useStore()
+user.getSideMenu()
 </script>
 
 <template>
@@ -23,7 +19,6 @@ const toggleCollapse = () => {
       <side-bar
         :activePath="activePath"
         :isCollapse="isCollapse"
-        :menuList="menuList"
         @toggleCollapse="toggleCollapse"
       ></side-bar>
       <!-- 右侧内容 -->

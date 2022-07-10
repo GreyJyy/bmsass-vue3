@@ -2,11 +2,12 @@ import { loginAPI } from '@/api/user'
 import { loginReq } from '@/types/user'
 import { defineStore } from 'pinia'
 import { ElMessage } from 'element-plus'
+import { getSideMenuAPI } from '@/api/permission'
 import Vrouter from '@/router'
 const router = Vrouter
 const useUserStore = defineStore('user', {
   state: () => {
-    return { token: '' }
+    return { token: '', menuList: [] }
   },
   getters: {},
   actions: {
@@ -33,6 +34,16 @@ const useUserStore = defineStore('user', {
           message: '登录失败',
           type: 'warning'
         })
+      }
+    },
+
+    //get side menu list
+    async getSideMenu() {
+      try {
+        const res = await getSideMenuAPI()
+        this.menuList = res.data
+      } catch (error) {
+        console.log(error) //for debug
       }
     }
   },

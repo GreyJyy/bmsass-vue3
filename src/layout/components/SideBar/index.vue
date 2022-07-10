@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import useStore from '@/store'
+import { ref } from 'vue'
 import { SideMenuItem } from '@/types/permission'
-const { isCollapse, activePath, menuList } = defineProps<{
+const { isCollapse, activePath } = defineProps<{
   isCollapse: boolean
   activePath: string
-  menuList: SideMenuItem[]
 }>()
 const emit = defineEmits<{ (e: 'toggleCollapse'): void }>()
 const toggleCollapse = () => emit('toggleCollapse')
+const { user } = useStore()
+const menuList = ref<SideMenuItem[]>(user.menuList)
 </script>
 
 <template>
