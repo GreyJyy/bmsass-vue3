@@ -1,8 +1,6 @@
 import { ref, reactive } from 'vue'
 import { addUserInfoAPI } from '@/api/user'
 import { ElMessage } from 'element-plus'
-import useSearch from '@/hooks/useSearch'
-const { getUserList } = useSearch()
 
 export default function () {
   const dialogFormVisible = ref(false)
@@ -18,12 +16,11 @@ export default function () {
       const res = await addUserInfoAPI(form)
       if (res.meta.status !== 201) return ElMessage.error(res.meta.msg)
       ElMessage.success(res.meta.msg)
-      hideDialog()
-      getUserList() //rerender the user list
     } catch (error) {
       console.error(error) //for debug
       ElMessage.error('创建失败')
     }
+    hideDialog()
   }
   return { dialogFormVisible, form, hideDialog, addNewUser }
 }

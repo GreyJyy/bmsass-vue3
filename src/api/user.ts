@@ -40,3 +40,9 @@ export const getUserByIdAPI = (id: string) =>
     url: `users/${id}`,
     method: 'GET'
   })
+
+export const deleteUserAPI = (id: number) =>
+  request({
+    url: `users/${id}`,
+    method: 'DELETE'
+  })

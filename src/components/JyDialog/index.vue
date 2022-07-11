@@ -1,7 +1,9 @@
 <script lang="ts" setup name="jydialog">
 import { addInfoReq } from '@/types/user'
 import useAddValidate from '@/hooks/useAddValidate'
-const { ruleFormRef, rules, submitForm } = useAddValidate() //to validate the add form
+import type { FormInstance } from 'element-plus'
+import { ElMessage } from 'element-plus'
+const { ruleFormRef, rules } = useAddValidate() //to validate the add form
 const formLabelWidth = '140px'
 const { dialogFormVisible, form, isEditing } = defineProps<{
   dialogFormVisible: boolean
@@ -10,15 +12,41 @@ const { dialogFormVisible, form, isEditing } = defineProps<{
 }>()
 const emit = defineEmits<{
   (e: 'hideDialog'): void
-  (e: 'addNewUser'): void
+  (e: 'addConfirm'): void
   (e: 'confirmEdit'): void
 }>()
+
+//add user
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      emit('addConfirm')
+      formEl.resetFields()
+    } else {
+      ElMessage.warning('添加失败')
+      return false
+    }
+  })
+}
 const confirmForm = () => {
   submitForm(ruleFormRef.value)
-  emit('addNewUser')
+}
+
+//edit user
+const submitForm2 = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      emit('confirmEdit')
+    } else {
+      ElMessage.warning('添加失败')
+      return false
+    }
+  })
 }
 const setEdit = () => {
-  emit('confirmEdit')
+  submitForm2(ruleFormRef.value)
 }
 </script>
 <template>

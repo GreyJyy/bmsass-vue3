@@ -1,8 +1,9 @@
 <script setup lang="ts" name="sidebar">
 import useStore from '@/store'
-
 import useIcons from '@/hooks/useIcons'
-const { icons, House } = useIcons() //to render the sideBar's icons
+
+//to render the sideBar's icons
+const { icons, House } = useIcons()
 
 const { user } = useStore()
 const { isCollapse, activePath } = defineProps<{

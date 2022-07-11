@@ -1,6 +1,6 @@
 import { useLoginValidate } from './useLoginValidate'
 import { reactive } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormRules } from 'element-plus'
 const { ruleFormRef, baseRules } = useLoginValidate()
 export default function () {
   const rules = reactive<FormRules>({
@@ -21,15 +21,8 @@ export default function () {
       }
     ]
   })
-  const submitForm = (formEl: FormInstance | undefined) => {
-    if (!formEl) return
-    formEl.validate((valid) => {
-      if (valid) formEl.resetFields()
-    })
-  }
   return {
     ruleFormRef,
-    rules,
-    submitForm
+    rules
   }
 }

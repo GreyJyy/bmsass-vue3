@@ -1,25 +1,29 @@
 <script setup lang="ts" name="users">
+import { ref } from 'vue'
 import { tableItem } from '@/types/permission'
-import { changeUserStatusAPI } from '@/api/user'
+import { changeUserStatusAPI, deleteUserAPI } from '@/api/user'
 import BreadCrumb from '@/components/BreadCrumb/index.vue'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
 import useSearch from '@/hooks/useSearch'
 import JyDialog from '@/components/JyDialog/index.vue'
+import DelConfirm from '@/components/DelConfirm/index.vue'
 import useAddUser from '@/hooks/useAddUser'
 import { ElMessage } from 'element-plus'
 import useEditUser from '@/hooks/useEditUser'
+import useDeleteUser from '@/hooks/useDeleteUser'
 
 //to add the new user
 const { dialogFormVisible, form, hideDialog, addNewUser } = useAddUser()
-
-// to edit the user info
-const { isEditing, editForm, handleEdit, confirmEdit } = useEditUser()
-
 const addBtn = () => {
   isEditing.value = false //when click the add button,show the addForm
   dialogFormVisible.value = true
 }
-
+const addConfirm = async () => {
+  await addNewUser()
+  getUserList() //rerender the user list
+}
+// to edit the user info
+const { isEditing, editForm, handleEdit, confirmEdit } = useEditUser()
 const editBtn = (row: tableItem) => {
   dialogFormVisible.value = true //when click the edit button,show the editForm
   handleEdit(row)
@@ -35,7 +39,8 @@ const editConfirmBtn = async () => {
 //searchById
 const { getUserList, searchById, tableData, query } = useSearch()
 
-getUserList() //to init the list
+//to init the list
+getUserList()
 
 // to change the user's status
 const changeStatus = async (row: tableItem) => {
@@ -43,21 +48,34 @@ const changeStatus = async (row: tableItem) => {
   if (res.meta.status === 200) return ElMessage.success('修改状态成功')
 }
 
-const handleDel = () => {
-  console.log('handleDel')
+//to delete the user
+const { delDialogVisible, delBtn, closeDelDialog, confirmDel } = useDeleteUser()
+const delConfirmBtn = async () => {
+  await confirmDel() //to confirm the delete operation
+  getUserList() //to rerender the list
 }
+
+//-------------------------------------------
 const handleRights = () => {
   console.log('handleRights')
 }
 </script>
 
 <template>
+  <!-- the dialog for deleting -->
+  <del-confirm
+    :delDialogVisible="delDialogVisible"
+    @closeDelDialog="closeDelDialog"
+    @delConfirmBtn="delConfirmBtn"
+  ></del-confirm>
+
+  <!-- the dialog for editing -->
   <jy-dialog
     :form="isEditing ? editForm : form"
     :dialogFormVisible="dialogFormVisible"
     :isEditing="isEditing"
     @hideDialog="hideDialog"
-    @addNewUser="addNewUser"
+    @addConfirm="addConfirm"
     @confirmEdit="editConfirmBtn"
   ></jy-dialog>
   <bread-crumb :index="0" :second-index="0"></bread-crumb>
@@ -100,7 +118,7 @@ const handleRights = () => {
               type="danger"
               :icon="Delete"
               size="small"
-              @click="handleDel"
+              @click="delBtn(row)"
             ></el-button>
             <el-button
               type="warning"
