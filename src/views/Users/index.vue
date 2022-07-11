@@ -1,16 +1,17 @@
 <script setup lang="ts" name="users">
-import { ref } from 'vue'
 import { tableItem } from '@/types/permission'
-import { changeUserStatusAPI, deleteUserAPI } from '@/api/user'
-import BreadCrumb from '@/components/BreadCrumb/index.vue'
+import { changeUserStatusAPI } from '@/api/user'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
-import useSearch from '@/hooks/useSearch'
+import { ElMessage } from 'element-plus'
 import JyDialog from '@/components/JyDialog/index.vue'
 import DelConfirm from '@/components/DelConfirm/index.vue'
+import ChoiceDialog from '@/components/ChoiceDialog/index.vue'
+import BreadCrumb from '@/components/BreadCrumb/index.vue'
+import useSearch from '@/hooks/useSearch'
 import useAddUser from '@/hooks/useAddUser'
-import { ElMessage } from 'element-plus'
 import useEditUser from '@/hooks/useEditUser'
 import useDeleteUser from '@/hooks/useDeleteUser'
+import useHandleRights from '@/hooks/useHandleRights'
 
 //to add the new user
 const { dialogFormVisible, form, hideDialog, addNewUser } = useAddUser()
@@ -55,10 +56,18 @@ const delConfirmBtn = async () => {
   getUserList() //to rerender the list
 }
 
-//-------------------------------------------
-const handleRights = () => {
-  console.log('handleRights')
-}
+//to setting the rights
+const {
+  title,
+  closeSetDialog,
+  setConfirmBtn,
+  handleRights,
+  setDialogVisible,
+  rolesList,
+  currentName,
+  currentUser,
+  currentRole
+} = useHandleRights()
 </script>
 
 <template>
@@ -78,6 +87,19 @@ const handleRights = () => {
     @addConfirm="addConfirm"
     @confirmEdit="editConfirmBtn"
   ></jy-dialog>
+
+  <!-- the dialog for setting -->
+  <choice-dialog
+    :title="title"
+    :setDialogVisible="setDialogVisible"
+    :rolesList="rolesList"
+    :currentName="currentName"
+    @closeSetDialog="closeSetDialog"
+    @setConfirmBtn="setConfirmBtn"
+  >
+    <div style="margin-bottom: 10px">当前的用户:{{ currentUser }}</div>
+    <div>当前的角色:{{ currentRole }}</div>
+  </choice-dialog>
   <bread-crumb :index="0" :second-index="0"></bread-crumb>
   <el-card class="box-card" style="margin-top: 20px">
     <template #header>
@@ -124,7 +146,7 @@ const handleRights = () => {
               type="warning"
               :icon="Setting"
               size="small"
-              @click="handleRights"
+              @click="handleRights(row)"
             ></el-button>
           </template>
         </el-table-column>

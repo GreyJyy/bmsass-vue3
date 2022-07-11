@@ -1,5 +1,5 @@
-import { ref, reactive } from 'vue'
 import { addUserInfoAPI } from '@/api/user'
+import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 
 export default function () {

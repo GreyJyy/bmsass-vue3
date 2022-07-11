@@ -35,11 +35,11 @@ export const editUserInfoAPI = (data: editInfoReq) =>
     data
   })
 
-export const getUserByIdAPI = (id: string) =>
-  request({
-    url: `users/${id}`,
-    method: 'GET'
-  })
+// export const getUserByIdAPI = (id: string) =>
+//   request({
+//     url: `users/${id}`,
+//     method: 'GET'
+//   })
 
 export const deleteUserAPI = (id: number) =>
   request({

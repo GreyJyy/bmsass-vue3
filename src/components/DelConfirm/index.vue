@@ -9,7 +9,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <el-dialog v-model="delDialogVisible" title="提示" width="30%">
+  <el-dialog
+    v-model="delDialogVisible"
+    title="提示"
+    width="30%"
+    :show-close="false"
+  >
     <span>此操作将永久删除该用户, 是否继续?</span>
     <template #footer>
       <span class="dialog-footer">

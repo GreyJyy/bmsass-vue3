@@ -1,6 +1,7 @@
+import useStore from '@/store'
 import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import useStore from '@/store'
+
 export const useLoginValidate = () => {
   const ruleFormRef = ref<FormInstance>()
   const baseAttrs = {

@@ -1,8 +1,9 @@
 <script lang="ts" setup name="jydialog">
 import { addInfoReq } from '@/types/user'
-import useAddValidate from '@/hooks/useAddValidate'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import useAddValidate from '@/hooks/useAddValidate'
+
 const { ruleFormRef, rules } = useAddValidate() //to validate the add form
 const formLabelWidth = '140px'
 const { dialogFormVisible, form, isEditing } = defineProps<{

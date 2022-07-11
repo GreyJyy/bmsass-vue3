@@ -1,7 +1,8 @@
-import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
 import { tableItem } from '@/types/permission'
 import { deleteUserAPI } from '@/api/user'
+import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+
 export default function () {
   //to delete the user
   const delId = ref(0)

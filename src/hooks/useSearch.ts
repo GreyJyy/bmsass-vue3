@@ -1,7 +1,8 @@
-import debounce from '@/utils/debounce'
-import { ref } from 'vue'
-import { getUserListAPI } from '@/api/user'
 import { tableItem } from '@/types/permission'
+import { getUserListAPI } from '@/api/user'
+import { ref } from 'vue'
+import debounce from '@/utils/debounce'
+
 export default () => {
   const tableData = ref([])
   const query = ref('')

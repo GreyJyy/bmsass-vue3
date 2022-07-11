@@ -1,7 +1,8 @@
 <script setup lang="ts" name="breadcrumb">
-import { ArrowRight } from '@element-plus/icons-vue'
 import useStore from '@/store'
 import { storeToRefs } from 'pinia'
+import { ArrowRight } from '@element-plus/icons-vue'
+
 const { index, secondIndex } = defineProps<{
   index: number
   secondIndex: number

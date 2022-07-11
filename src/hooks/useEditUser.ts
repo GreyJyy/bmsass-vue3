@@ -1,7 +1,8 @@
-import { ref, reactive } from 'vue'
-import { editUserInfoAPI } from '@/api/user'
-import { ElMessage } from 'element-plus'
 import { tableItem } from '@/types/permission'
+import { editUserInfoAPI } from '@/api/user'
+import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+
 export default function () {
   const isEditing = ref(false) //to control the edit status
   const editForm = reactive({
