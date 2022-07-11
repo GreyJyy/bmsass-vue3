@@ -7,11 +7,16 @@ import JyDialog from '@/components/JyDialog/index.vue'
 import DelConfirm from '@/components/DelConfirm/index.vue'
 import ChoiceDialog from '@/components/ChoiceDialog/index.vue'
 import BreadCrumb from '@/components/BreadCrumb/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import useSearch from '@/hooks/useSearch'
 import useAddUser from '@/hooks/useAddUser'
 import useEditUser from '@/hooks/useEditUser'
 import useDeleteUser from '@/hooks/useDeleteUser'
 import useHandleRights from '@/hooks/useHandleRights'
+import usePagination from '@/hooks/usePagination'
+
+//to control the pagination
+const { currentPage, pageSize } = usePagination()
 
 //to add the new user
 const { dialogFormVisible, form, hideDialog, addNewUser } = useAddUser()
@@ -21,7 +26,7 @@ const addBtn = () => {
 }
 const addConfirm = async () => {
   await addNewUser()
-  getUserList() //rerender the user list
+  getUserList(currentPage.value, pageSize.value) //rerender the user list
 }
 // to edit the user info
 const { isEditing, editForm, handleEdit, confirmEdit } = useEditUser()
@@ -33,15 +38,15 @@ const editBtn = (row: tableItem) => {
 //to confirm the edit result
 const editConfirmBtn = async () => {
   await confirmEdit()
-  getUserList() //to rerender the list
+  getUserList(currentPage.value, pageSize.value) //to rerender the list
   dialogFormVisible.value = false
 }
 
 //searchById
-const { getUserList, searchById, tableData, query } = useSearch()
+const { getUserList, searchById, tableData, query, totalItems } = useSearch()
 
 //to init the list
-getUserList()
+getUserList(currentPage.value, pageSize.value)
 
 // to change the user's status
 const changeStatus = async (row: tableItem) => {
@@ -53,7 +58,7 @@ const changeStatus = async (row: tableItem) => {
 const { delDialogVisible, delBtn, closeDelDialog, confirmDel } = useDeleteUser()
 const delConfirmBtn = async () => {
   await confirmDel() //to confirm the delete operation
-  getUserList() //to rerender the list
+  getUserList(currentPage.value, pageSize.value) //to rerender the list
 }
 
 //to setting the rights
@@ -152,6 +157,12 @@ const {
         </el-table-column>
       </el-table>
     </div>
+
+    <!-- the pagination -->
+    <pagination
+      :totalItems="totalItems"
+      @getUserList="getUserList"
+    ></pagination>
   </el-card>
 </template>
 
