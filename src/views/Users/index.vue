@@ -6,6 +6,31 @@ import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
 import useSearch from '@/hooks/useSearch'
 import JyDialog from '@/components/JyDialog/index.vue'
 import useAddUser from '@/hooks/useAddUser'
+import { ElMessage } from 'element-plus'
+import useEditUser from '@/hooks/useEditUser'
+
+//to add the new user
+const { dialogFormVisible, form, hideDialog, addNewUser } = useAddUser()
+
+// to edit the user info
+const { isEditing, editForm, handleEdit, confirmEdit } = useEditUser()
+
+const addBtn = () => {
+  isEditing.value = false //when click the add button,show the addForm
+  dialogFormVisible.value = true
+}
+
+const editBtn = (row: tableItem) => {
+  dialogFormVisible.value = true //when click the edit button,show the editForm
+  handleEdit(row)
+}
+
+//to confirm the edit result
+const editConfirmBtn = async () => {
+  await confirmEdit()
+  getUserList() //to rerender the list
+  dialogFormVisible.value = false
+}
 
 //searchById
 const { getUserList, searchById, tableData, query } = useSearch()
@@ -14,28 +39,26 @@ getUserList() //to init the list
 
 // to change the user's status
 const changeStatus = async (row: tableItem) => {
-  await changeUserStatusAPI(row.id, row['mg_state'])
+  const res = await changeUserStatusAPI(row.id, row['mg_state'])
+  if (res.meta.status === 200) return ElMessage.success('修改状态成功')
 }
-const handleEdit = () => {
-  console.log('handleEdit')
-}
+
 const handleDel = () => {
   console.log('handleDel')
 }
 const handleRights = () => {
   console.log('handleRights')
 }
-
-//to add the new user
-const { dialogFormVisible, form, hideDialog, addNewUser } = useAddUser()
 </script>
 
 <template>
   <jy-dialog
-    :form="form"
+    :form="isEditing ? editForm : form"
     :dialogFormVisible="dialogFormVisible"
+    :isEditing="isEditing"
     @hideDialog="hideDialog"
     @addNewUser="addNewUser"
+    @confirmEdit="editConfirmBtn"
   ></jy-dialog>
   <bread-crumb :index="0" :second-index="0"></bread-crumb>
   <el-card class="box-card" style="margin-top: 20px">
@@ -49,10 +72,7 @@ const { dialogFormVisible, form, hideDialog, addNewUser } = useAddUser()
           :suffix-icon="Search"
           @input="searchById"
         />
-        <el-button
-          type="primary"
-          style="height: 38px"
-          @click="dialogFormVisible = true"
+        <el-button type="primary" style="height: 38px" @click="addBtn"
           >添加用户</el-button
         >
       </div>
@@ -69,12 +89,12 @@ const { dialogFormVisible, form, hideDialog, addNewUser } = useAddUser()
           /></template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="180">
-          <template #default>
+          <template #default="{ row }">
             <el-button
               type="primary"
               :icon="Edit"
               size="small"
-              @click="handleEdit"
+              @click="editBtn(row)"
             ></el-button>
             <el-button
               type="danger"

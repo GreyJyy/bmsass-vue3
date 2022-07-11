@@ -11,6 +11,7 @@ export type tableItem = {
   email: string
   id: number
   index: number
+  mobile: string
   mg_state: boolean
   role_name: string
   username: string

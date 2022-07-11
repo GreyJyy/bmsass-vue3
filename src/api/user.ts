@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { loginReq, userListReq, addInfoReq } from '@/types/user'
+import { loginReq, userListReq, addInfoReq, editInfoReq } from '@/types/user'
 
 export const loginAPI = (data: loginReq) =>
   request({
@@ -26,4 +26,17 @@ export const changeUserStatusAPI = (uId: number, type: boolean) =>
   request({
     url: `users/${uId}/state/${type}`,
     method: 'PUT'
+  })
+
+export const editUserInfoAPI = (data: editInfoReq) =>
+  request({
+    url: `users/${data.id}`,
+    method: 'PUT',
+    data
+  })
+
+export const getUserByIdAPI = (id: string) =>
+  request({
+    url: `users/${id}`,
+    method: 'GET'
   })

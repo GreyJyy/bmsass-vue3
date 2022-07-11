@@ -13,9 +13,7 @@ export default () => {
     })
     tableData.value = res.data.users
     let ind = 0
-    tableData.value.forEach((item: tableItem) => {
-      item.index = ++ind
-    })
+    tableData.value.forEach((item: tableItem) => (item.index = ++ind))
   }
   const searchById = () => debounce(getUserList, 500)
 

@@ -14,7 +14,14 @@ export type userListReq = {
 //for addUserInfoAPI
 export type addInfoReq = {
   username: string
-  password: string
+  password: string | null
   email: string
   mobile: string
+}
+
+//for editUserInfoAPI
+export type editInfoReq = {
+  id: number
+  email: string | null
+  mobile: string | null
 }
