@@ -22,3 +22,8 @@ export type setRoleData = {
   id: number
   rid: number
 }
+
+export type grantReq = {
+  roleId: number
+  rids: string | null
+}

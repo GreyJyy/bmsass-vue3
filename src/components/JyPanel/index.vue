@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
+import DelConfirm from '@/components/DelConfirm/index.vue'
 type operation = 'Edit' | 'Delete' | 'Setting' //chose button
-const props = defineProps<{
+const tableConfig = defineProps<{
   operations?: operation[] //visible buttons
   hasHeader: boolean
   hasSearchInput: boolean
   hasSearchButton: boolean
   hasOperation: boolean
+  hasIndex: boolean
+  hasExpand: boolean //the expand option
   tableData: object[] //the data for table
   labels: string[] //the headline name
   tables: string[] //each column's data
@@ -16,7 +20,8 @@ const emits = defineEmits<{
   (e: 'onClick'): void //for search button's click event
   (e: 'onEdit'): void //for edit operation's click event
   (e: 'onDelete'): void //for delete operation's click event
-  (e: 'onGrant'): void //for grant operation's click event
+  (e: 'onGrant', row: any): void //for grant operation's click event
+  (e: 'onRemoveRight', roleId: number, rightId: number): void //for remove right's click event
 }>()
 //search---------------------------
 const query = ''
@@ -31,22 +36,41 @@ const onClick = () => {
 //search-----------------------------
 //3 btns-----------------------------
 const onEdit = (row: any) => {
-  console.log('onEdit')
+  console.log('编辑还没做')
   emits('onEdit')
 }
 const onDelete = (row: any) => {
-  console.log('onEdit')
-  emits('onEdit')
+  console.log('删除还没做')
+  emits('onDelete')
 }
 const onGrant = (row: any) => {
-  console.log('onEdit')
-  emits('onEdit')
+  console.log(row)
+
+  emits('onGrant', row)
 }
+const delInfo = ref({
+  roleId: 0,
+  rightId: 0
+})
 //3 btns-----------------------------
+
+//remove certain right
+const delDialogVisible = ref(false)
+const onRemoveRight = (roleId: number, rightId: number) => {
+  delInfo.value.roleId = roleId
+  delInfo.value.rightId = rightId
+  delDialogVisible.value = true
+}
+const closeDelDialog = () => (delDialogVisible.value = false)
+const delConfirmBtn = () => {
+  emits('onRemoveRight', delInfo.value.roleId, delInfo.value.rightId)
+  delDialogVisible.value = false
+}
 </script>
 
 <template>
   <el-card class="box-card" style="margin-top: 20px">
+    <!-- the head line -->
     <template #header v-if="hasHeader">
       <div class="card-header">
         <el-input
@@ -67,8 +91,53 @@ const onGrant = (row: any) => {
         >
       </div>
     </template>
+    <!-- the main table -->
     <div class="table">
       <el-table border :data="tableData" stripe style="width: 100%">
+        <!-- the expand treeList -->
+        <el-table-column type="expand" v-if="hasExpand" label="#" fixed="left">
+          <template #default="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-row v-for="item in props.row.children" :key="item.id">
+                <el-col :span="6" class="left">
+                  <div class="class1">
+                    <el-tag class="class1">{{ item.authName }}</el-tag>
+                    <i class="el-icon-caret-right"></i>
+                  </div>
+                </el-col>
+                <el-col :span="18" class="right">
+                  <div
+                    class="wrap"
+                    v-for="item2 in item.children"
+                    :key="item2.id"
+                  >
+                    <div class="class2">
+                      <el-tag type="success">{{ item2.authName }}</el-tag
+                      ><i class="el-icon-caret-right"></i>
+                    </div>
+                    <div class="class3">
+                      <el-tag
+                        closable
+                        @close="onRemoveRight(props.row.id, item3.id)"
+                        v-for="item3 in item2.children"
+                        :key="item3.id"
+                        >{{ item3.authName }}</el-tag
+                      >
+                    </div>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-form>
+          </template>
+        </el-table-column>
+        <!-- the index column -->
+        <el-table-column
+          type="index"
+          :index="1"
+          label="#"
+          v-if="hasIndex"
+        ></el-table-column>
+        <!-- the information column -->
         <el-table-column
           v-for="(item, index) in tables"
           :key="index"
@@ -94,6 +163,7 @@ const onGrant = (row: any) => {
             >
           </template>
         </el-table-column>
+        <!-- the operation column -->
         <el-table-column
           fixed="right"
           label="操作"
@@ -127,6 +197,49 @@ const onGrant = (row: any) => {
       </el-table>
     </div>
   </el-card>
+  <!-- the delete confirm dialog -->
+  <del-confirm
+    :delDialogVisible="delDialogVisible"
+    @closeDelDialog="closeDelDialog"
+    @delConfirmBtn="delConfirmBtn"
+  ></del-confirm>
 </template>
 
-<style scoped></style>
+<style scoped lang="less">
+.el-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  border-top: 1px solid #eee;
+  i {
+    line-height: 32px;
+  }
+  .el-tag {
+    margin: 8px;
+  }
+  .left {
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+    .class1 {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .right {
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    .wrap {
+      display: flex;
+    }
+    .class2 {
+      display: flex;
+      align-items: center;
+      margin-right: 50px;
+    }
+    .class3 {
+      display: inline-block;
+    }
+  }
+}
+</style>
