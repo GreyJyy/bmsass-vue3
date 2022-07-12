@@ -7,6 +7,7 @@ const { totalItems } = defineProps<{
 const emits = defineEmits<{
   (e: 'getUserList', currentPage: number, pageSize: number): void
 }>()
+
 //to control the pagination
 const { currentPage, pageSize } = usePagination()
 
@@ -14,11 +15,13 @@ const { currentPage, pageSize } = usePagination()
 const small = ref(false)
 const background = ref(false)
 const disabled = ref(false)
+
 // change the items of each page
 const handleSizeChange = (val: number) => {
   pageSize.value = val
   emits('getUserList', currentPage.value, pageSize.value)
 }
+
 // change the current page
 const handleCurrentChange = (val: number) => {
   currentPage.value = val
@@ -45,7 +48,7 @@ const handleCurrentChange = (val: number) => {
 
 <style scoped>
 .demo-pagination-block {
-  margin-top: 30px;
+  margin-top: 10px;
 }
 .demo-pagination-block .demonstration {
   margin-bottom: 16px;
