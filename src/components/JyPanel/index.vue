@@ -2,11 +2,11 @@
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
 type operation = 'Edit' | 'Delete' | 'Setting' //chose button
 const props = defineProps<{
+  operations?: operation[] //visible buttons
   hasHeader: boolean
   hasSearchInput: boolean
   hasSearchButton: boolean
   hasOperation: boolean
-  operations?: operation[] //visible buttons
   tableData: object[] //the data for table
   labels: string[] //the headline name
   tables: string[] //each column's data

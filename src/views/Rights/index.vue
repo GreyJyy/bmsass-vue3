@@ -35,6 +35,7 @@ const tables = ['index', 'authName', 'path', 'level']
     :hasHeader="false"
     :hasSearchInput="false"
     :hasSearchButton="false"
+    :hasOperation="false"
     :tableData="rightsList"
     :labels="labels"
     :tables="tables"
