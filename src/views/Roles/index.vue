@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ChildItem } from '@/types/roles'
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
 import BreadCrumb from '@/components/BreadCrumb/index.vue'
 import JyPanel from '@/components/JyPanel/index.vue'
 import {
@@ -21,7 +20,7 @@ const defaultRightProps = ref({
   children: 'children',
   label: 'authName'
 })
-const defaultRightList = ref([])
+const defaultRightList = ref<number[]>([])
 const rightList = ref([])
 const loadNode = (node: Node, resolve: (data: Tree[]) => void) => {
   if (node.level === 0) {
@@ -44,17 +43,28 @@ const loadNode = (node: Node, resolve: (data: Tree[]) => void) => {
   }, 500)
 }
 // tree---------------------------------------
-interface roles {
+interface IRoles {
   roleName: string
   roleDesc: string
   children: ChildItem[]
 }
-
+interface IRowItem<T> {
+  id: number
+  roleDesc: string
+  roleName: string
+  children: T
+}
+type childItem = {
+  id: number
+  authName: string
+  path: string
+  children?: childItem[]
+}
 //get roles list
-const rolesList = ref<roles[]>([])
+const rolesList = ref<IRoles[]>([])
 const getRolesList = async () => {
   const res = await getRolesListAPI()
-  rolesList.value = res.data
+  rolesList.value = res
 }
 getRolesList() //render the table
 const labels = ['角色名称', '角色描述']
@@ -62,23 +72,44 @@ const tables = ['roleName', 'roleDesc']
 
 //remove the certain right
 const onRemoveRight = async (roleId: number, rightId: number) => {
-  try {
-    await deleteCertainRightAPI(roleId, rightId)
-    ElMessage.success('删除成功')
-    getRolesList()
-  } catch (error) {
-    console.error(error) //for debug
-    ElMessage.error('删除失败')
-  }
+  await deleteCertainRightAPI(roleId, rightId)
+  getRolesList()
 }
 
 //grant the user right
 const grantDialogVisible = ref(false)
 const currentRoleId = ref(0)
-const onGrant = async (row: any) => {
+const onGrant = async (row: IRowItem<childItem[]>) => {
   const res = await getRightsList('tree')
-  rightList.value = res.data
+  rightList.value = res
+  console.log(row)
+  const addDeepChildIds = (arr?: childItem[]) => {
+    if (arr?.every((item: any) => !item.children)) return
+    row.children.forEach((item: any) => {
+      if (!item.children) {
+        defaultRightList.value.push(item.id)
+      } else {
+        addDeepChildIds(item.children)
+      }
+    })
+  }
+  addDeepChildIds()
+  console.log(defaultRightList.value)
+  // const findDeepChildId = (rows: childItem[] | []) => {
+  //   if (rows.some((item: any) => !item.children)) {
+  //     rows.forEach((item: any) => {
+  //       defaultRightList.value.push(item.id)
+  //     })
+  //     return
+  //   }
+  //   row.children.forEach((item: any) => {
+  //     findDeepChildId(item.children)
+  //   })
+  // }
+  // findDeepChildId([])
+  // console.log(defaultRightList.value)
   currentRoleId.value = row.id
+  // console.log(currentRoleId.value)
   grantDialogVisible.value = true
 }
 const closeGrantDialog = () => (grantDialogVisible.value = false)

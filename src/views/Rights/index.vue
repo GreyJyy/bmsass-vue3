@@ -11,7 +11,7 @@ interface rights {
 const rightsList = ref<rights[]>([])
 const getRights = async () => {
   const res = await getRightsList('list')
-  rightsList.value = res.data
+  rightsList.value = res
   rightsList.value.forEach((item: rights) => {
     item.level =
       item.level === '0' ? '等级一' : item.level === '1' ? '等级二' : '等级三'

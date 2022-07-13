@@ -12,14 +12,7 @@ export default function () {
   })
   const hideDialog = () => (dialogFormVisible.value = false)
   const addNewUser = async () => {
-    try {
-      const res = await addUserInfoAPI(form)
-      if (res.meta.status !== 201) return ElMessage.error(res.meta.msg)
-      ElMessage.success(res.meta.msg)
-    } catch (error) {
-      console.error(error) //for debug
-      ElMessage.error('创建失败')
-    }
+    await addUserInfoAPI(form)
     hideDialog()
   }
   return { dialogFormVisible, form, hideDialog, addNewUser }

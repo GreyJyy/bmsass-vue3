@@ -14,7 +14,7 @@ interface orders {
 const ordersList = ref<orders[]>([])
 const getOrders = async () => {
   const res = await getOrdersListAPI({ query: null, pagenum: 1, pagesize: 10 })
-  ordersList.value = res.data.goods
+  ordersList.value = res.goods
   ordersList.value.forEach((item: orders) => {
     item.pay_status = item.pay_status === '0' ? '未支付' : '已支付'
     item.create_time = formatDate(item.create_time)

@@ -15,8 +15,8 @@ export default () => {
       pagenum: currentPage,
       pagesize: pageSize
     })
-    tableData.value = res.data.users //the visible users
-    totalItems.value = res.data.total //all users count
+    tableData.value = res.users //the visible users
+    totalItems.value = res.total //all users count
 
     const ind = ref((currentPage - 1) * pageSize) //avoid index infinite increasing
     tableData.value.forEach((item) => {

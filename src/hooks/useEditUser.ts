@@ -19,11 +19,7 @@ export default function () {
       email,
       mobile
     })
-    if (res.meta.status === 200) {
-      ElMessage.success('编辑成功')
-    } else {
-      ElMessage.warning('编辑失败')
-    }
+    ElMessage.success('编辑成功')
   }
   const handleEdit = (row: tableItem) => {
     isEditing.value = true //when click the edit button,show the editForm

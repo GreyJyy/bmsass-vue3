@@ -44,8 +44,6 @@ const onDelete = (row: any) => {
   emits('onDelete')
 }
 const onGrant = (row: any) => {
-  console.log(row)
-
   emits('onGrant', row)
 }
 const delInfo = ref({

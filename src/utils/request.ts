@@ -1,6 +1,7 @@
 import axios from 'axios'
 import useStore from '@/store'
 import jsonBig from 'json-bigint'
+import { ElMessage } from 'element-plus'
 declare module 'axios' {
   interface AxiosInstance {
     (config: AxiosRequestConfig): Promise<any>
@@ -32,17 +33,23 @@ service.interceptors.request.use(
     }
     return config
   },
-  () => {
-    return Promise.reject(new Error('error'))
+  (err) => {
+    return Promise.reject(err)
   }
 )
 
 //response interceptors
 service.interceptors.response.use(
   (response) => {
-    return response.data
+    const { data, meta } = response.data
+    if (meta.status === 200 || meta.status === 201) {
+      return data
+    }
+    ElMessage.error(meta.msg)
+    return Promise.reject(new Error(meta.msg))
   },
   (error) => {
+    ElMessage.error(error)
     return Promise.reject(error)
   }
 )

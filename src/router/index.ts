@@ -61,7 +61,7 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/views/Login/index.vue')
     },
-    { path: '/404', name: '404', component: import('@/views/404.vue') },
+    { path: '/404', name: '404', component: () => import('@/views/404.vue') },
     // 404 page must be placed at the end
     { path: '/:pathMatch(.*)', redirect: '/404' }
   ]

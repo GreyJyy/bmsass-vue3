@@ -16,11 +16,7 @@ export default function () {
   }
   const confirmDel = async () => {
     const res = await deleteUserAPI(delId.value)
-    if (res.meta.status === 200) {
-      ElMessage.success('删除成功')
-    } else {
-      ElMessage.warning('删除失败')
-    }
+    ElMessage.success('删除成功')
     closeDelDialog()
   }
   return {

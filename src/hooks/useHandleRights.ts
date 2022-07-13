@@ -23,7 +23,7 @@ export default function () {
       id: currentId.value,
       rid
     })
-    if (res.meta.status !== 200) ElMessage.warning('设置失败')
+    ElMessage.success('设置成功')
     setDialogVisible.value = false
   }
   const handleRights = async (row: tableItem) => {
@@ -31,8 +31,8 @@ export default function () {
     currentRole.value = row.role_name
     currentId.value = row.id
     const res = await getRolesListAPI()
-    rolesList.value = res.data
-    currentName.value = res.data[0].roleName
+    rolesList.value = res
+    currentName.value = res[0].roleName
     setDialogVisible.value = true
   }
   return {

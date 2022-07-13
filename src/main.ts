@@ -7,6 +7,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import locale from 'element-plus/lib/locale/lang/zh-cn' //chinese
+import '@/permission' //router guard
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
