@@ -8,7 +8,7 @@ router.beforeEach((to, _, next) => {
   const { user } = useStore()
   nProgress.start()
   if (user.token) {
-    to.name === 'login' ? next('/') : next()
+    to.name === 'login' ? next('/') : next() //test
     return
   }
   whiteList.includes(to.path) ? next() : next('/login')
