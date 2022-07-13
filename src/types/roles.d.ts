@@ -9,7 +9,7 @@ export type ChildItem = {
   id: number
   authName: string
   path: string
-  children: T
+  children?: ChildItem[]
 }
 
 export type RoleItem = {

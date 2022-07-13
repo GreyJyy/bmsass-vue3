@@ -4,16 +4,16 @@ import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
 import DelConfirm from '@/components/DelConfirm/index.vue'
 type operation = 'Edit' | 'Delete' | 'Setting' //chose button
 const tableConfig = defineProps<{
-  operations?: operation[] //visible buttons
-  hasHeader: boolean
-  hasSearchInput: boolean
-  hasSearchButton: boolean
-  hasOperation: boolean
-  hasIndex: boolean
-  hasExpand: boolean //the expand option
-  tableData: object[] //the data for table
   labels: string[] //the headline name
   tables: string[] //each column's data
+  operations?: operation[] //visible buttons
+  hasHeader?: boolean
+  hasSearchInput?: boolean
+  hasSearchButton?: boolean
+  hasOperation?: boolean
+  hasIndex?: boolean
+  hasExpand?: boolean //the expand option
+  tableData?: object[] //the data for table
 }>()
 const emits = defineEmits<{
   (e: 'onSearch'): void //for search input's input event
@@ -104,6 +104,10 @@ const delConfirmBtn = () => {
                   </div>
                 </el-col>
                 <el-col :span="18" class="right">
+                  <!-- <tree-columns
+                    :child-list="item.children"
+                    :son-list="item.children"
+                  ></tree-columns> -->
                   <div
                     class="wrap"
                     v-for="item2 in item.children"

@@ -19,7 +19,7 @@ export default function () {
     const rid = rolesList.value.find(
       (item) => item.roleName === currentName
     )!.id
-    const res = await setUserRoleAPI({
+    await setUserRoleAPI({
       id: currentId.value,
       rid
     })
@@ -32,7 +32,7 @@ export default function () {
     currentId.value = row.id
     const res = await getRolesListAPI()
     rolesList.value = res
-    currentName.value = res[0].roleName
+    currentName.value = res[0]?.roleName || '请选择'
     setDialogVisible.value = true
   }
   return {

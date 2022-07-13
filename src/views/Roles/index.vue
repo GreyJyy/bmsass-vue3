@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ChildItem } from '@/types/roles'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
+import { ElMessage } from 'element-plus'
 import BreadCrumb from '@/components/BreadCrumb/index.vue'
 import JyPanel from '@/components/JyPanel/index.vue'
 import {
@@ -9,25 +10,49 @@ import {
   rolesGrantAPI
 } from '@/api/roles'
 import { getRightsList } from '@/api/permission'
-// tree---------------------------------------
 import type Node from 'element-plus/es/components/tree/src/model/node'
+import { ElTree } from 'element-plus'
+
 interface Tree {
   name: string
   leaf?: boolean
 }
+interface IRoles {
+  roleName: string
+  roleDesc: string
+  children: ChildItem[]
+}
+interface IRowItem extends IRoles {
+  id: number
+}
 
+type CheckedObj = ChildItem & {
+  pid: string
+}
+type nodes = CheckedObj & {
+  $treeNodeId: number
+}
+interface ITreeStatus<T> {
+  checkedNodes: T[]
+  checkedKeys: number[]
+  halfCheckedNodes: T[]
+  halfCheckedKeys: number[]
+}
+
+//about right tree
 const defaultRightProps = ref({
   children: 'children',
   label: 'authName'
 })
-const defaultRightList = ref<number[]>([])
-const rightList = ref([])
+const defaultRightList = ref<number[]>([]) //default checked list
+const rightList = ref([]) //all rights list
 const loadNode = (node: Node, resolve: (data: Tree[]) => void) => {
   if (node.level === 0) {
     return resolve([{ name: 'region' }])
   }
   if (node.level > 1) return resolve([])
 
+  //tree's lazy loading
   setTimeout(() => {
     const data: Tree[] = [
       {
@@ -38,28 +63,10 @@ const loadNode = (node: Node, resolve: (data: Tree[]) => void) => {
         name: 'zone'
       }
     ]
-
     resolve(data)
   }, 500)
 }
-// tree---------------------------------------
-interface IRoles {
-  roleName: string
-  roleDesc: string
-  children: ChildItem[]
-}
-interface IRowItem<T> {
-  id: number
-  roleDesc: string
-  roleName: string
-  children: T
-}
-type childItem = {
-  id: number
-  authName: string
-  path: string
-  children?: childItem[]
-}
+
 //get roles list
 const rolesList = ref<IRoles[]>([])
 const getRolesList = async () => {
@@ -73,58 +80,93 @@ const tables = ['roleName', 'roleDesc']
 //remove the certain right
 const onRemoveRight = async (roleId: number, rightId: number) => {
   await deleteCertainRightAPI(roleId, rightId)
+  ElMessage.success('删除成功')
   getRolesList()
 }
 
 //grant the user right
 const grantDialogVisible = ref(false)
 const currentRoleId = ref(0)
-const onGrant = async (row: IRowItem<childItem[]>) => {
+const treeRef = ref<InstanceType<typeof ElTree>>()
+
+//update the checked keys (fixed the bug for missing checked keys rending)
+const setCheckedKeys = (arr: any) => {
+  treeRef.value!.setCheckedKeys(arr, false)
+}
+//get checked keys
+const getCheckedKeys = () => {
+  treeRef.value!.getCheckedKeys(false)
+}
+
+const getInnermostIds = (row: IRowItem | ChildItem) => {
+  if (!row.children) return
+  row.children.forEach((item: ChildItem) => {
+    if (item.children) {
+      getInnermostIds(item)
+    } else {
+      defaultRightList.value.push(item.id)
+    }
+  })
+}
+
+//click the grant button
+const onGrant = async (row: IRowItem) => {
   const res = await getRightsList('tree')
-  rightList.value = res
+  rightList.value = res //render the right list
+  defaultRightList.value = []
   console.log(row)
-  const addDeepChildIds = (arr?: childItem[]) => {
-    if (arr?.every((item: any) => !item.children)) return
-    row.children.forEach((item: any) => {
-      if (!item.children) {
-        defaultRightList.value.push(item.id)
-      } else {
-        addDeepChildIds(item.children)
-      }
-    })
-  }
-  addDeepChildIds()
-  console.log(defaultRightList.value)
-  // const findDeepChildId = (rows: childItem[] | []) => {
-  //   if (rows.some((item: any) => !item.children)) {
-  //     rows.forEach((item: any) => {
-  //       defaultRightList.value.push(item.id)
-  //     })
-  //     return
-  //   }
-  //   row.children.forEach((item: any) => {
-  //     findDeepChildId(item.children)
-  //   })
-  // }
-  // findDeepChildId([])
-  // console.log(defaultRightList.value)
-  currentRoleId.value = row.id
-  // console.log(currentRoleId.value)
+  getInnermostIds(row)
+  //waiting for DOM rending
+  nextTick(() => {
+    //'if':avoid the error of 'undefined'(although it doesn't make a difference)
+    if (treeRef.value) setCheckedKeys(defaultRightList.value)
+  })
+  currentRoleId.value = row.id //save the current role id
   grantDialogVisible.value = true
 }
-const closeGrantDialog = () => (grantDialogVisible.value = false)
-const grantConfirm = () => {
-  // rolesGrantAPI()
+
+//close right granting dialog
+const closeGrantDialog = () => {
+  isChanged.value = false
+  ElMessage.info('取消修改')
+  grantDialogVisible.value = false
+}
+
+const rids = ref<number[]>([]) //save current checked nodes
+const isChanged = ref(false) //a flag for rights changing
+
+//response for changing node's status
+const onChangeChecked = (
+  currentCheckedObj: CheckedObj,
+  currentTreeStatus: ITreeStatus<nodes>
+) => {
+  isChanged.value = true
+  rids.value = currentTreeStatus.checkedKeys
+  console.log(rids.value)
+}
+
+//confirm grant
+const grantConfirm = async () => {
+  if (isChanged.value) {
+    await rolesGrantAPI({
+      roleId: currentRoleId.value,
+      rids: rids.value.join()
+    })
+    isChanged.value = false
+    getRolesList()
+  }
+  ElMessage.success('更新成功')
   grantDialogVisible.value = false
 }
 </script>
 
 <template>
   <bread-crumb :index="1" :second-index="0"></bread-crumb>
+
+  <!-- main table -->
   <jy-panel
     :hasHeader="true"
     :hasSearchInput="true"
-    :hasSearchButton="false"
     :hasOperation="true"
     :hasExpand="true"
     :hasIndex="true"
@@ -143,14 +185,16 @@ const grantConfirm = () => {
     width="30%"
     :show-close="false"
   >
+    <!-- right tree -->
     <el-tree
-      ref="tree"
+      ref="treeRef"
       :data="rightList"
       show-checkbox
       node-key="id"
       default-expand-all
       :default-checked-keys="defaultRightList"
       :props="defaultRightProps"
+      @check="onChangeChecked"
     >
     </el-tree>
     <template #footer>

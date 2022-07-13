@@ -25,11 +25,6 @@ const tables = ['authName', 'path', 'level']
 <template>
   <bread-crumb :index="1" :second-index="1"></bread-crumb>
   <jy-panel
-    :hasHeader="false"
-    :hasSearchInput="false"
-    :hasSearchButton="false"
-    :hasOperation="false"
-    :hasExpand="false"
     :hasIndex="true"
     :tableData="rightsList"
     :labels="labels"

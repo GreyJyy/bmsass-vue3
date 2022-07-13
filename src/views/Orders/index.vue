@@ -36,9 +36,7 @@ const tables = [
   <jy-panel
     :hasHeader="true"
     :hasSearchInput="true"
-    :hasSearchButton="false"
     :hasOperation="true"
-    :hasExpand="false"
     :hasIndex="true"
     :operations="['Edit']"
     :tableData="ordersList"

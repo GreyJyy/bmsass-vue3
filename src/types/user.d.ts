@@ -12,9 +12,7 @@ export type userListReq = {
 }
 
 //for addUserInfoAPI
-export type addInfoReq = {
-  username: string
-  password: string | null
+export type addInfoReq = loginReq & {
   email: string
   mobile: string
 }
