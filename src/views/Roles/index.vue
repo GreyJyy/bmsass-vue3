@@ -93,11 +93,11 @@ const treeRef = ref<InstanceType<typeof ElTree>>()
 const setCheckedKeys = (arr: any) => {
   treeRef.value!.setCheckedKeys(arr, false)
 }
-//get checked keys
-const getCheckedKeys = () => {
-  treeRef.value!.getCheckedKeys(false)
-}
 
+const getCheckedKeys = () => treeRef.value!.getCheckedKeys(false) //get checked son nodes
+const getHalfCheckedKeys = () => treeRef.value!.getHalfCheckedKeys() // get half checked nodes
+
+//recursive traversal to get the innermost right id
 const getInnermostIds = (row: IRowItem | ChildItem) => {
   if (!row.children) return
   row.children.forEach((item: ChildItem) => {
@@ -114,8 +114,8 @@ const onGrant = async (row: IRowItem) => {
   const res = await getRightsList('tree')
   rightList.value = res //render the right list
   defaultRightList.value = []
-  console.log(row)
   getInnermostIds(row)
+
   //waiting for DOM rending
   nextTick(() => {
     //'if':avoid the error of 'undefined'(although it doesn't make a difference)
@@ -127,34 +127,20 @@ const onGrant = async (row: IRowItem) => {
 
 //close right granting dialog
 const closeGrantDialog = () => {
-  isChanged.value = false
   ElMessage.info('取消修改')
   grantDialogVisible.value = false
 }
 
-const rids = ref<number[]>([]) //save current checked nodes
-const isChanged = ref(false) //a flag for rights changing
-
-//response for changing node's status
-const onChangeChecked = (
-  currentCheckedObj: CheckedObj,
-  currentTreeStatus: ITreeStatus<nodes>
-) => {
-  isChanged.value = true
-  rids.value = currentTreeStatus.checkedKeys
-  console.log(rids.value)
-}
+const rids = ref<number[]>([]) //save all checked nodes
 
 //confirm grant
 const grantConfirm = async () => {
-  if (isChanged.value) {
-    await rolesGrantAPI({
-      roleId: currentRoleId.value,
-      rids: rids.value.join()
-    })
-    isChanged.value = false
-    getRolesList()
-  }
+  rids.value = [...getCheckedKeys(), ...getHalfCheckedKeys()] as number[] //concat the checked and half checked nodes
+  await rolesGrantAPI({
+    roleId: currentRoleId.value,
+    rids: rids.value.join()
+  })
+  getRolesList() //re render
   ElMessage.success('更新成功')
   grantDialogVisible.value = false
 }
@@ -194,7 +180,6 @@ const grantConfirm = async () => {
       default-expand-all
       :default-checked-keys="defaultRightList"
       :props="defaultRightProps"
-      @check="onChangeChecked"
     >
     </el-tree>
     <template #footer>
