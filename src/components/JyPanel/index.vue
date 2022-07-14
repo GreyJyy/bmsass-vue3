@@ -10,6 +10,7 @@ const tableConfig = defineProps<{
   hasHeader?: boolean
   hasSearchInput?: boolean
   hasSearchButton?: boolean
+  buttonName?: string
   hasOperation?: boolean
   hasIndex?: boolean
   hasExpand?: boolean //the expand option
@@ -85,7 +86,7 @@ const delConfirmBtn = () => {
           type="primary"
           style="height: 38px"
           @click="onClick"
-          >添加用户</el-button
+          >{{ buttonName }}</el-button
         >
       </div>
     </template>

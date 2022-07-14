@@ -130,10 +130,14 @@ const closeGrantDialog = () => {
   ElMessage.info('取消修改')
   grantDialogVisible.value = false
 }
-
-const rids = ref<number[]>([]) //save all checked nodes
+//add new role
+const buttonName = ref<string>('添加角色')
+const onClick = () => {
+  console.log('add role')
+}
 
 //confirm grant
+const rids = ref<number[]>([]) //save all checked nodes
 const grantConfirm = async () => {
   rids.value = [...getCheckedKeys(), ...getHalfCheckedKeys()] as number[] //concat the checked and half checked nodes
   await rolesGrantAPI({
@@ -152,7 +156,8 @@ const grantConfirm = async () => {
   <!-- main table -->
   <jy-panel
     :hasHeader="true"
-    :hasSearchInput="true"
+    :hasSearchButton="true"
+    :buttonName="buttonName"
     :hasOperation="true"
     :hasExpand="true"
     :hasIndex="true"
@@ -161,6 +166,7 @@ const grantConfirm = async () => {
     :labels="labels"
     :tables="tables"
     @onRemoveRight="onRemoveRight"
+    @onClick="onClick"
     @onGrant="onGrant"
   ></jy-panel>
 

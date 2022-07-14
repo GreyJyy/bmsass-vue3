@@ -12,10 +12,13 @@ export type ChildItem = {
   children?: ChildItem[]
 }
 
-export type RoleItem = {
-  id: number
+export type roleInfo = {
   roleName: string
   roleDesc: string | null
+}
+
+export type RoleItem = roleInfo & {
+  id: number
 }
 
 export type setRoleData = {

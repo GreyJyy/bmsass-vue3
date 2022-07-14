@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 import { RoleItem, setRoleData, grantReq } from '@/types/roles'
+import { roleInfo } from '@/types/roles'
 export const getRolesListAPI = () =>
   request({
     url: 'roles',
@@ -29,6 +30,13 @@ export const deleteCertainRightAPI = (roleId: number, rightId: number) =>
 export const rolesGrantAPI = (data: grantReq) =>
   request({
     url: `roles/${data.roleId}/rights`,
+    method: 'POST',
+    data
+  })
+
+export const addNewRoleAPI = (data: roleInfo) =>
+  request({
+    url: 'roles',
     method: 'POST',
     data
   })
