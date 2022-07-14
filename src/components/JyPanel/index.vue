@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { tableItem } from '@/types/permission'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
-import DelConfirm from '@/components/DelConfirm/index.vue'
 type operation = 'Edit' | 'Delete' | 'Setting' //chose button
 const tableConfig = defineProps<{
   labels: string[] //the headline name
@@ -21,7 +20,7 @@ const emits = defineEmits<{
   (e: 'onClick'): void //for search button's click event
   (e: 'onEdit'): void //for edit operation's click event
   (e: 'onDelete'): void //for delete operation's click event
-  (e: 'onGrant', row: any): void //for grant operation's click event
+  (e: 'onGrant', row: tableItem): void //for grant operation's click event
   (e: 'onRemoveRight', roleId: number, rightId: number): void //for remove right's click event
 }>()
 //search---------------------------
@@ -31,20 +30,19 @@ const onSearch = () => {
   emits('onSearch')
 }
 const onClick = () => {
-  console.log('onClick')
   emits('onClick')
 }
 //search-----------------------------
 //3 btns-----------------------------
-const onEdit = (row: any) => {
+const onEdit = (row: tableItem) => {
   console.log('编辑还没做')
   emits('onEdit')
 }
-const onDelete = (row: any) => {
+const onDelete = (row: tableItem) => {
   console.log('删除还没做')
   emits('onDelete')
 }
-const onGrant = (row: any) => {
+const onGrant = (row: tableItem) => {
   emits('onGrant', row)
 }
 const delInfo = ref({
@@ -134,6 +132,7 @@ const delConfirmBtn = () => {
             </el-form>
           </template>
         </el-table-column>
+
         <!-- the index column -->
         <el-table-column
           type="index"
@@ -141,6 +140,7 @@ const delConfirmBtn = () => {
           label="#"
           v-if="hasIndex"
         ></el-table-column>
+
         <!-- the information column -->
         <el-table-column
           v-for="(item, index) in tables"
@@ -167,6 +167,7 @@ const delConfirmBtn = () => {
             >
           </template>
         </el-table-column>
+
         <!-- the operation column -->
         <el-table-column
           fixed="right"
@@ -201,6 +202,7 @@ const delConfirmBtn = () => {
       </el-table>
     </div>
   </el-card>
+
   <!-- the delete confirm dialog -->
   <del-confirm
     :delDialogVisible="delDialogVisible"
@@ -224,7 +226,6 @@ const delConfirmBtn = () => {
   .left {
     display: flex;
     justify-content: center;
-    // align-items: center;
     .class1 {
       display: flex;
       align-items: center;

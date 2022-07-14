@@ -1,12 +1,13 @@
 import axios from 'axios'
 import useStore from '@/store'
 import jsonBig from 'json-bigint'
-import { ElMessage } from 'element-plus'
+// import { ElMessage } from 'element-plus'
 declare module 'axios' {
   interface AxiosInstance {
     (config: AxiosRequestConfig): Promise<any>
   }
 }
+
 const timeout = 8000
 const service = axios.create({
   baseURL: 'http://liufusong.top:8899/api/private/v1/',

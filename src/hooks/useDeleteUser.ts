@@ -1,7 +1,5 @@
 import { tableItem } from '@/types/permission'
 import { deleteUserAPI } from '@/api/user'
-import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
 
 export default function () {
   //to delete the user
@@ -15,7 +13,7 @@ export default function () {
     delDialogVisible.value = false
   }
   const confirmDel = async () => {
-    const res = await deleteUserAPI(delId.value)
+    await deleteUserAPI(delId.value)
     ElMessage.success('删除成功')
     closeDelDialog()
   }

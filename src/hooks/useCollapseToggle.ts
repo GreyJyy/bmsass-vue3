@@ -1,5 +1,4 @@
 import useStore from '@/store'
-import { ref } from 'vue'
 
 const { user } = useStore()
 export default function () {

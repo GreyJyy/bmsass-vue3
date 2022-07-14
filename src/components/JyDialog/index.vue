@@ -10,7 +10,6 @@ const { dialogFormVisible, form, isEditing } = defineProps<{
   dialogFormVisible: boolean
   form: addInfoReq
   isEditing: boolean
-  isAddRole: boolean
 }>()
 const emit = defineEmits<{
   (e: 'hideDialog'): void
@@ -82,8 +81,7 @@ const setEdit = () => {
       </span>
     </template>
   </el-dialog>
-  <!-- for add new role -->
-  <el-dialog v-if="isAddRole"></el-dialog>
+
   <!-- for add user info -->
   <el-dialog
     v-else

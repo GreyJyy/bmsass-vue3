@@ -1,6 +1,4 @@
 import { addUserInfoAPI } from '@/api/user'
-import { ref, reactive } from 'vue'
-import { ElMessage } from 'element-plus'
 
 export default function () {
   const dialogFormVisible = ref(false)
@@ -13,6 +11,7 @@ export default function () {
   const hideDialog = () => (dialogFormVisible.value = false)
   const addNewUser = async () => {
     await addUserInfoAPI(form)
+    ElMessage.success('添加成功')
     hideDialog()
   }
   return { dialogFormVisible, form, hideDialog, addNewUser }

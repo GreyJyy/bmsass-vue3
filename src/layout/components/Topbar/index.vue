@@ -1,6 +1,5 @@
 <script setup lang="ts" name="topbar">
 import useStore from '@/store'
-import { useRouter } from 'vue-router'
 
 const { user } = useStore()
 const router = useRouter()

@@ -1,6 +1,5 @@
 import { tableItem } from '@/types/permission'
 import { getUserListAPI } from '@/api/user'
-import { ref } from 'vue'
 import debounce from '@/utils/debounce'
 
 //to control the pagination

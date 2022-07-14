@@ -1,5 +1,4 @@
 <script setup lang="ts" name="Page404">
-import { computed, ref } from 'vue'
 const message = computed(
   () => 'The webmaster said that you can not enter this page...'
 )

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import BreadCrumb from '@/components/BreadCrumb/index.vue'
-import JyPanel from '@/components/JyPanel/index.vue'
 import { getOrdersListAPI } from '@/api/orders'
 import { formatDate } from '@/utils/formatDate'
 interface orders {

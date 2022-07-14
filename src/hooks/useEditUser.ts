@@ -1,7 +1,5 @@
 import { tableItem } from '@/types/permission'
 import { editUserInfoAPI } from '@/api/user'
-import { ref, reactive } from 'vue'
-import { ElMessage } from 'element-plus'
 
 export default function () {
   const isEditing = ref(false) //to control the edit status
@@ -14,7 +12,7 @@ export default function () {
   })
   const confirmEdit = async () => {
     const { id, email, mobile } = editForm
-    const res = await editUserInfoAPI({
+    await editUserInfoAPI({
       id,
       email,
       mobile

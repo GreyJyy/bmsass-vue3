@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import BreadCrumb from '@/components/BreadCrumb/index.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <bread-crumb :index="2" :second-index="1"></bread-crumb>

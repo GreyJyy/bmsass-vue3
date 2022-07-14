@@ -1,8 +1,6 @@
 import { tableItem } from '@/types/permission'
 import { IRoles, ChildItem } from '@/types/roles'
 import { getRolesListAPI, setUserRoleAPI } from '@/api/roles'
-import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
 
 export default function () {
   const currentUser = ref('')

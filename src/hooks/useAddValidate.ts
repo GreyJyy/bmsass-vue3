@@ -1,10 +1,8 @@
-import { reactive } from 'vue'
-import type { FormRules } from 'element-plus'
 import { useLoginValidate } from './useLoginValidate'
 
 const { ruleFormRef, baseRules } = useLoginValidate()
 export default function () {
-  const rules = reactive<FormRules>({
+  const rules = reactive({
     ...baseRules,
     email: [
       {

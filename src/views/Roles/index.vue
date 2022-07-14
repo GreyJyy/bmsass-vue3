@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ChildItem } from '@/types/roles'
-import { ref, nextTick } from 'vue'
+import { addNewRoleAPI } from '@/api/roles'
 import { ElMessage } from 'element-plus'
-import BreadCrumb from '@/components/BreadCrumb/index.vue'
-import JyPanel from '@/components/JyPanel/index.vue'
 import {
   getRolesListAPI,
   deleteCertainRightAPI,
@@ -28,15 +26,6 @@ interface IRowItem extends IRoles {
 
 type CheckedObj = ChildItem & {
   pid: string
-}
-type nodes = CheckedObj & {
-  $treeNodeId: number
-}
-interface ITreeStatus<T> {
-  checkedNodes: T[]
-  checkedKeys: number[]
-  halfCheckedNodes: T[]
-  halfCheckedKeys: number[]
 }
 
 //about right tree
@@ -130,11 +119,6 @@ const closeGrantDialog = () => {
   ElMessage.info('取消修改')
   grantDialogVisible.value = false
 }
-//add new role
-const buttonName = ref<string>('添加角色')
-const onClick = () => {
-  console.log('add role')
-}
 
 //confirm grant
 const rids = ref<number[]>([]) //save all checked nodes
@@ -147,6 +131,29 @@ const grantConfirm = async () => {
   getRolesList() //re render
   ElMessage.success('更新成功')
   grantDialogVisible.value = false
+}
+
+//add new role
+const buttonName = ref<string>('添加角色')
+const addDialogVisible = ref(false)
+const form = ref({
+  roleName: '',
+  roleDsc: ''
+})
+const onClick = () => {
+  addDialogVisible.value = true
+}
+const closeAddDialog = () => {
+  addDialogVisible.value = false
+}
+const addConfirmDialog = async () => {
+  await addNewRoleAPI({
+    roleName: form.value.roleName,
+    roleDesc: form.value.roleDsc
+  })
+  getRolesList() //re render
+  ElMessage.success('添加角色成功!')
+  addDialogVisible.value = false
 }
 </script>
 
@@ -192,6 +199,29 @@ const grantConfirm = async () => {
       <span class="dialog-footer">
         <el-button @click="closeGrantDialog">取消</el-button>
         <el-button type="primary" @click="grantConfirm">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
+  <!-- add new role dialog -->
+  <el-dialog
+    v-model="addDialogVisible"
+    title="添加角色"
+    width="30%"
+    :show-close="false"
+  >
+    <el-form :model="form">
+      <el-form-item label="角色名" label-width="120px" prop="roleName">
+        <el-input v-model="form.roleName" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="角色描述" label-width="120px" prop="roleDsc">
+        <el-input v-model="form.roleDsc" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="closeAddDialog">取消</el-button>
+        <el-button type="primary" @click="addConfirmDialog">确认</el-button>
       </span>
     </template>
   </el-dialog>

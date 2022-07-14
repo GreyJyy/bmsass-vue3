@@ -1,5 +1,3 @@
-import { ref } from 'vue'
-
 export default function () {
   const currentPage = ref(1)
   const pageSize = ref(5)
