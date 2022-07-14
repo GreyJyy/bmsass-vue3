@@ -104,6 +104,7 @@ const delConfirmBtn = () => {
                   </div>
                 </el-col>
                 <el-col :span="18" class="right">
+                  <!-- a recursive component but still have a bug(cant send id) which i cant resolve,so i annotated it -->
                   <!-- <tree-columns
                     :child-list="item.children"
                     :son-list="item.children"
