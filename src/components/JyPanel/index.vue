@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import { tableItem } from '@/types/permission'
+import { ChildItem } from '@/types/roles'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
 type operation = 'Edit' | 'Delete' | 'Setting' //chose button
+interface IRoles {
+  roleName: string
+  roleDesc: string
+  children: ChildItem[]
+}
+interface IRowItem extends IRoles {
+  id: number
+}
+
 const tableConfig = defineProps<{
   labels: string[] //the headline name
   tables: string[] //each column's data
@@ -20,7 +29,7 @@ const emits = defineEmits<{
   (e: 'onClick'): void //for search button's click event
   (e: 'onEdit'): void //for edit operation's click event
   (e: 'onDelete'): void //for delete operation's click event
-  (e: 'onGrant', row: tableItem): void //for grant operation's click event
+  (e: 'onGrant', row: IRowItem): void //for grant operation's click event
   (e: 'onRemoveRight', roleId: number, rightId: number): void //for remove right's click event
 }>()
 //search---------------------------
@@ -34,15 +43,17 @@ const onClick = () => {
 }
 //search-----------------------------
 //3 btns-----------------------------
-const onEdit = (row: tableItem) => {
+const onEdit = (row: IRowItem) => {
   console.log('编辑还没做')
   emits('onEdit')
 }
-const onDelete = (row: tableItem) => {
+const onDelete = (row: IRowItem) => {
   console.log('删除还没做')
   emits('onDelete')
 }
-const onGrant = (row: tableItem) => {
+const onGrant = (row: IRowItem) => {
+  console.log(row)
+
   emits('onGrant', row)
 }
 const delInfo = ref({

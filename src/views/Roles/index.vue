@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ChildItem } from '@/types/roles'
 import { addNewRoleAPI } from '@/api/roles'
-import { ElMessage } from 'element-plus'
 import {
   getRolesListAPI,
   deleteCertainRightAPI,
@@ -22,10 +21,6 @@ interface IRoles {
 }
 interface IRowItem extends IRoles {
   id: number
-}
-
-type CheckedObj = ChildItem & {
-  pid: string
 }
 
 //about right tree
