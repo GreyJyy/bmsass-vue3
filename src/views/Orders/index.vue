@@ -36,6 +36,7 @@ const tables = [
     :hasOperation="true"
     :hasIndex="true"
     :operations="['Edit']"
+    operationWidth="80px"
     :tableData="ordersList"
     :labels="labels"
     :tables="tables"

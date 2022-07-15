@@ -22,10 +22,12 @@ const tableConfig = defineProps<{
   hasOperation?: boolean
   hasIndex?: boolean
   hasExpand?: boolean //the expand option
-  tableData?: object[] //the data for table
+  tableData: object[] //the data for table
+  widthList?: string[]
+  operationWidth?: string
 }>()
 const emits = defineEmits<{
-  (e: 'onSearch'): void //for search input's input event
+  (e: 'onSearch', query: string): void //for search input's input event
   (e: 'onClick'): void //for search button's click event
   (e: 'onEdit'): void //for edit operation's click event
   (e: 'onDelete'): void //for delete operation's click event
@@ -33,10 +35,10 @@ const emits = defineEmits<{
   (e: 'onRemoveRight', roleId: number, rightId: number): void //for remove right's click event
 }>()
 //search---------------------------
-const query = ''
+const query = ref('')
 const onSearch = () => {
   console.log('onSearch')
-  emits('onSearch')
+  emits('onSearch', query.value)
 }
 const onClick = () => {
   emits('onClick')
@@ -157,6 +159,7 @@ const delConfirmBtn = () => {
           v-for="(item, index) in tables"
           :key="index"
           :prop="item"
+          :width="widthList && widthList[index]"
           :label="labels[index]"
         >
           <template #default="scope" v-if="item === 'level'">
@@ -183,7 +186,7 @@ const delConfirmBtn = () => {
         <el-table-column
           fixed="right"
           label="操作"
-          width="180"
+          :width="operationWidth"
           v-if="hasOperation"
         >
           <template #default="{ row }">

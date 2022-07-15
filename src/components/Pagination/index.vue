@@ -5,6 +5,7 @@ const { totalItems } = defineProps<{
 }>()
 const emits = defineEmits<{
   (e: 'getUserList', currentPage: number, pageSize: number): void
+  (e: 'getGoodsList', currentPage: number, pageSize: number): void
 }>()
 
 //to control the pagination
@@ -19,12 +20,14 @@ const disabled = ref(false)
 const handleSizeChange = (val: number) => {
   pageSize.value = val
   emits('getUserList', currentPage.value, pageSize.value)
+  emits('getGoodsList', currentPage.value, pageSize.value)
 }
 
 // change the current page
 const handleCurrentChange = (val: number) => {
   currentPage.value = val
   emits('getUserList', currentPage.value, pageSize.value)
+  emits('getGoodsList', currentPage.value, pageSize.value)
 }
 </script>
 
