@@ -29,8 +29,8 @@ const tableConfig = defineProps<{
 const emits = defineEmits<{
   (e: 'onSearch', query: string): void //for search input's input event
   (e: 'onClick'): void //for search button's click event
-  (e: 'onEdit'): void //for edit operation's click event
-  (e: 'onDelete'): void //for delete operation's click event
+  (e: 'onEdit', row: IRowItem): void //for edit operation's click event
+  (e: 'onDelete', row: IRowItem): void //for delete operation's click event
   (e: 'onGrant', row: IRowItem): void //for grant operation's click event
   (e: 'onRemoveRight', roleId: number, rightId: number): void //for remove right's click event
 }>()
@@ -46,16 +46,12 @@ const onClick = () => {
 //search-----------------------------
 //3 btns-----------------------------
 const onEdit = (row: IRowItem) => {
-  console.log('编辑还没做')
-  emits('onEdit')
+  emits('onEdit', row)
 }
 const onDelete = (row: IRowItem) => {
-  console.log('删除还没做')
-  emits('onDelete')
+  emits('onDelete', row)
 }
 const onGrant = (row: IRowItem) => {
-  console.log(row)
-
   emits('onGrant', row)
 }
 const delInfo = ref({

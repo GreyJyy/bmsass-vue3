@@ -40,3 +40,9 @@ export const addNewRoleAPI = (data: roleInfo) =>
     method: 'POST',
     data
   })
+
+export const deleteRoleAPI = (id: number) =>
+  request({
+    url: `roles/${id}`,
+    method: 'DELETE'
+  })

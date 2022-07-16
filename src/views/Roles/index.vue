@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ChildItem } from '@/types/roles'
-import { addNewRoleAPI } from '@/api/roles'
+import { ChildItem, RoleItem } from '@/types/roles'
+import { addNewRoleAPI, commitRoleChangeAPI } from '@/api/roles'
 import {
   getRolesListAPI,
   deleteCertainRightAPI,
-  rolesGrantAPI
+  rolesGrantAPI,
+  deleteRoleAPI
 } from '@/api/roles'
 import { getRightsList } from '@/api/permission'
 import type Node from 'element-plus/es/components/tree/src/model/node'
@@ -22,6 +23,11 @@ interface IRoles {
 interface IRowItem extends IRoles {
   id: number
 }
+
+//render the table
+onMounted(() => {
+  getRolesList()
+})
 
 //about right tree
 const defaultRightProps = ref({
@@ -57,13 +63,13 @@ const getRolesList = async () => {
   const res = await getRolesListAPI()
   rolesList.value = res
 }
-getRolesList() //render the table
 const labels = ['角色名称', '角色描述']
 const tables = ['roleName', 'roleDesc']
 
-//remove the certain right
+//-----TODO remove the certain right
 const onRemoveRight = async (roleId: number, rightId: number) => {
-  await deleteCertainRightAPI(roleId, rightId)
+  const res = await deleteCertainRightAPI(roleId, rightId)
+  console.log(res)
   ElMessage.success('删除成功')
   getRolesList()
 }
@@ -84,13 +90,9 @@ const getHalfCheckedKeys = () => treeRef.value!.getHalfCheckedKeys() // get half
 //recursive traversal to get the innermost right id
 const getInnermostIds = (row: IRowItem | ChildItem) => {
   if (!row.children) return
-  row.children.forEach((item: ChildItem) => {
-    if (item.children) {
-      getInnermostIds(item)
-    } else {
-      defaultRightList.value.push(item.id)
-    }
-  })
+  row.children.forEach((item: ChildItem) =>
+    item.children ? getInnermostIds(item) : defaultRightList.value.push(item.id)
+  )
 }
 
 //click the grant button
@@ -119,7 +121,7 @@ const closeGrantDialog = () => {
 const rids = ref<number[]>([]) //save all checked nodes
 const grantConfirm = async () => {
   rids.value = [...getCheckedKeys(), ...getHalfCheckedKeys()] as number[] //concat the checked and half checked nodes
-  await rolesGrantAPI({
+  await await rolesGrantAPI({
     roleId: currentRoleId.value,
     rids: rids.value.join()
   })
@@ -150,6 +152,40 @@ const addConfirmDialog = async () => {
   ElMessage.success('添加角色成功!')
   addDialogVisible.value = false
 }
+
+//delete role
+const onDelete = async (row: IRowItem) => {
+  await deleteRoleAPI(row.id)
+  ElMessage({
+    message: '删除成功',
+    grouping: true,
+    type: 'success'
+  })
+  getRolesList() //re render
+}
+
+//edit role
+const editDialogVisible = ref(false)
+const editInfo = ref<RoleItem>({
+  id: 0,
+  roleName: '',
+  roleDesc: ''
+})
+const closeEditDialog = () => {
+  editDialogVisible.value = false
+}
+const editConfirmDialog = async () => {
+  const res = await commitRoleChangeAPI(editInfo.value)
+  closeEditDialog()
+  getRolesList() //re render
+}
+const onEdit = async (row: IRowItem) => {
+  editInfo.value.id = row.id
+  editInfo.value.roleDesc = row.roleDesc
+  editInfo.value.roleName = row.roleName
+  editDialogVisible.value = true
+  // const res = await commitRoleChangeAPI()
+}
 </script>
 
 <template>
@@ -170,6 +206,8 @@ const addConfirmDialog = async () => {
     @onRemoveRight="onRemoveRight"
     @onClick="onClick"
     @onGrant="onGrant"
+    @onDelete="onDelete"
+    @onEdit="onEdit"
   ></jy-panel>
 
   <!-- grant right dialog -->
@@ -217,6 +255,29 @@ const addConfirmDialog = async () => {
       <span class="dialog-footer">
         <el-button @click="closeAddDialog">取消</el-button>
         <el-button type="primary" @click="addConfirmDialog">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
+  <!-- edit  role dialog -->
+  <el-dialog
+    v-model="editDialogVisible"
+    title="编辑角色"
+    width="30%"
+    :show-close="false"
+  >
+    <el-form :model="editInfo">
+      <el-form-item label="角色名" label-width="120px" prop="roleName">
+        <el-input v-model="editInfo.roleName" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="角色描述" label-width="120px" prop="roleDsc">
+        <el-input v-model="editInfo.roleDesc" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="closeEditDialog">取消</el-button>
+        <el-button type="primary" @click="editConfirmDialog">确认</el-button>
       </span>
     </template>
   </el-dialog>
