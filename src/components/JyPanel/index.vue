@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ChildItem } from '@/types/roles'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
-import usePagination from '@/hooks/usePagination'
 type operation = 'Edit' | 'Delete' | 'Setting' //chose button
 interface IRoles {
   roleName: string
@@ -39,6 +38,7 @@ const emits = defineEmits<{
   (e: 'onRemoveRight', roleId: number, rightId: number): void //for remove right's click event
 }>()
 
+//index line increase
 const count = computed(() => {
   return (tableConfig.curPage! - 1) * tableConfig.pSize! + 1
 })
@@ -107,7 +107,13 @@ const delConfirmBtn = () => {
     </template>
     <!-- the main table -->
     <div class="table">
-      <el-table border :data="tableData" stripe style="width: 100%">
+      <el-table
+        border
+        :data="tableData"
+        row-key="id"
+        stripe
+        style="width: 100%"
+      >
         <!-- the expand treeList -->
         <el-table-column type="expand" v-if="hasExpand" label="#" fixed="left">
           <template #default="props">

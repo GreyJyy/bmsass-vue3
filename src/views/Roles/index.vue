@@ -71,7 +71,7 @@ const onRemoveRight = async (roleId: number, rightId: number) => {
   const res = await deleteCertainRightAPI(roleId, rightId)
   rightList.value = res
   ElMessage.success('删除成功')
-  // getRolesList()
+  getRolesList()
 }
 
 //grant the user right
@@ -199,6 +199,8 @@ const onEdit = async (row: IRowItem) => {
     :hasOperation="true"
     :hasExpand="true"
     :hasIndex="true"
+    :curPage="1"
+    :pSize="1"
     :operations="['Edit', 'Delete', 'Setting']"
     :tableData="rolesList"
     :labels="labels"

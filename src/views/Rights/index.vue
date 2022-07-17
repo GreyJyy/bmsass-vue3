@@ -23,6 +23,8 @@ const tables = ['authName', 'path', 'level']
   <bread-crumb :index="1" :second-index="1"></bread-crumb>
   <jy-panel
     :hasIndex="true"
+    :curPage="1"
+    :pSize="1"
     :tableData="rightsList"
     :labels="labels"
     :tables="tables"
