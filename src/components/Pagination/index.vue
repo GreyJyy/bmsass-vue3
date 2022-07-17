@@ -19,6 +19,7 @@ const disabled = ref(false)
 // change the items of each page
 const handleSizeChange = (val: number) => {
   pageSize.value = val
+  console.log(pageSize.value)
   emits('getUserList', currentPage.value, pageSize.value)
   emits('getGoodsList', currentPage.value, pageSize.value)
 }
@@ -26,6 +27,7 @@ const handleSizeChange = (val: number) => {
 // change the current page
 const handleCurrentChange = (val: number) => {
   currentPage.value = val
+  console.log(currentPage.value)
   emits('getUserList', currentPage.value, pageSize.value)
   emits('getGoodsList', currentPage.value, pageSize.value)
 }

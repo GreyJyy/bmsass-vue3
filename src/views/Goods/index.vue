@@ -49,6 +49,8 @@ onMounted(() => {
 
 //pagination
 const { currentPage, pageSize } = usePagination() //to control the pagination
+const curPage = ref(1)
+const pSize = ref(5)
 const totalItems = ref(0)
 const changePagination = async (currentPage: number, pageSize: number) => {
   const res: goodsItem<goodsInfo[]> = await getGoodsListAPI({
@@ -60,7 +62,10 @@ const changePagination = async (currentPage: number, pageSize: number) => {
     item.add_time = formatDate(item.add_time as string)
   })
   goodsList.value = res.goods
+  curPage.value = currentPage
+  pSize.value = pageSize
 }
+
 //on search
 const onSearch = (query: string) => {
   debounce(() => {
@@ -83,6 +88,8 @@ const onSearch = (query: string) => {
     button-name="添加商品"
     :has-operation="true"
     :has-index="true"
+    :curPage="curPage"
+    :pSize="pSize"
     :table-data="goodsList"
     @on-search="onSearch"
   ></jy-panel>

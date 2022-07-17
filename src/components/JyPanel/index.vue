@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ChildItem } from '@/types/roles'
 import { Delete, Edit, Setting, Search } from '@element-plus/icons-vue'
+import usePagination from '@/hooks/usePagination'
 type operation = 'Edit' | 'Delete' | 'Setting' //chose button
 interface IRoles {
   roleName: string
@@ -21,11 +22,14 @@ const tableConfig = defineProps<{
   buttonName?: string
   hasOperation?: boolean
   hasIndex?: boolean
+  curPage?: number
+  pSize?: number
   hasExpand?: boolean //the expand option
   tableData: object[] //the data for table
   widthList?: string[]
   operationWidth?: string
 }>()
+
 const emits = defineEmits<{
   (e: 'onSearch', query: string): void //for search input's input event
   (e: 'onClick'): void //for search button's click event
@@ -34,6 +38,10 @@ const emits = defineEmits<{
   (e: 'onGrant', row: IRowItem): void //for grant operation's click event
   (e: 'onRemoveRight', roleId: number, rightId: number): void //for remove right's click event
 }>()
+
+const count = computed(() => {
+  return (tableConfig.curPage! - 1) * tableConfig.pSize! + 1
+})
 //search---------------------------
 const query = ref('')
 const onSearch = () => {
@@ -145,7 +153,7 @@ const delConfirmBtn = () => {
         <!-- the index column -->
         <el-table-column
           type="index"
-          :index="1"
+          :index="count"
           label="#"
           v-if="hasIndex"
         ></el-table-column>
