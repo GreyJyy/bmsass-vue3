@@ -1,7 +1,6 @@
 import axios from 'axios'
 import useStore from '@/store'
 import jsonBig from 'json-bigint'
-// import { ElMessage } from 'element-plus'
 declare module 'axios' {
   interface AxiosInstance {
     (config: AxiosRequestConfig): Promise<any>
@@ -26,9 +25,12 @@ service.defaults.transformResponse = [
 ]
 
 //request interceptors
+const tokenTimeout = 3600 * 1000 * 2 //for token timeout validate
+let prevTime: number
 service.interceptors.request.use(
   (config) => {
     const { user } = useStore()
+    if (!user.token) prevTime = +new Date()
     if (config.headers && user.token) {
       config.headers['Authorization'] = `${user.token}`
     }
@@ -42,6 +44,11 @@ service.interceptors.request.use(
 //response interceptors
 service.interceptors.response.use(
   (response) => {
+    if (Date.now() - prevTime > tokenTimeout) {
+      const { user } = useStore()
+      user.token = ''
+      return Promise.reject(new Error('token已过期'))
+    }
     const { data, meta } = response.data
     if (meta.status === 200 || meta.status === 201) {
       return data
@@ -51,6 +58,11 @@ service.interceptors.response.use(
   },
   (error) => {
     ElMessage.error(error)
+    //i don't know the status code for token failure...
+    if (error.msg === '无效token') {
+      const { user } = useStore()
+      user.token = ''
+    }
     return Promise.reject(error)
   }
 )

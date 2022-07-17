@@ -69,9 +69,9 @@ const tables = ['roleName', 'roleDesc']
 //-----TODO remove the certain right
 const onRemoveRight = async (roleId: number, rightId: number) => {
   const res = await deleteCertainRightAPI(roleId, rightId)
-  console.log(res)
+  rightList.value = res
   ElMessage.success('删除成功')
-  getRolesList()
+  // getRolesList()
 }
 
 //grant the user right
