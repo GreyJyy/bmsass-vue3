@@ -14,6 +14,7 @@ interface IRowItem extends IRoles {
 const tableConfig = defineProps<{
   labels: string[] //the headline name
   tables: string[] //each column's data
+  tableData: object[] //the data for table
   operations?: operation[] //visible buttons
   hasHeader?: boolean
   hasSearchInput?: boolean
@@ -21,10 +22,9 @@ const tableConfig = defineProps<{
   buttonName?: string
   hasOperation?: boolean
   hasIndex?: boolean
-  curPage?: number
-  pSize?: number
+  curPage?: number //if hasIndex,u must set this prop
+  pSize?: number //same as curPage
   hasExpand?: boolean //the expand option
-  tableData: object[] //the data for table
   widthList?: string[]
   operationWidth?: string
 }>()
