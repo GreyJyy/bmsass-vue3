@@ -13,23 +13,17 @@ import type {
   TabsPaneContext
 } from 'element-plus'
 import { Delete, Edit } from '@element-plus/icons-vue'
-import { ElInput } from 'element-plus'
+import useParamsTags from '@/hooks/useParamTags'
+import type { RowItem } from '@/hooks/useParamTags'
 
-type RowItem = {
-  attr_id: number
-  attr_name: string
-  attr_sel: 'only' | 'many'
-  attr_vals: string
-  attr_write: string
-  cat_id: number
-  delete_time: string | null
-  inputValue?: string
-  inputVisible?: boolean
-}
+//init categories data
+onMounted(async () => {
+  categories.value = await getCategoriesAPI()
+})
+
 //cascader
 const value = ref<number[]>([])
 const categories = ref<CascaderOption[]>([])
-const tableData = ref<RowItem[]>([])
 const props: CascaderProps = {
   expandTrigger: 'hover' as ExpandTrigger,
   value: 'cat_id',
@@ -63,11 +57,6 @@ const onDelete = async (row: RowItem) => {
   theRow.value = row
   deleteVisible.value = true
 }
-
-//init categories data
-onMounted(async () => {
-  categories.value = await getCategoriesAPI()
-})
 
 //tabs
 const activeName = ref('first')
@@ -161,47 +150,9 @@ const confirmEdit = async () => {
   editVisible.value = false
 }
 
-//tags
-const InputRef = ref<InstanceType<typeof ElInput>>()
-
-const handleClose = async (row: RowItem, tag: string) => {
-  await editAttributesAPI({
-    id: row.cat_id,
-    attrid: row.attr_id,
-    attr_name: row.attr_name,
-    attr_sel: row.attr_sel,
-    attr_vals: row.attr_vals
-      .split(' ')
-      .filter((item: string) => item !== tag)
-      .join(' ')
-  })
-  tableData.value = await getAttributesAPI({
-    id: row.cat_id,
-    sel: row.attr_sel
-  })
-  ElMessage.success('删除成功!')
-}
-
-const showInput = (row: RowItem) => {
-  row.inputVisible = true
-  nextTick(() => {
-    InputRef.value!.input!.focus()
-  })
-}
-const handleInputConfirm = async (row: RowItem) => {
-  if (row.inputValue) {
-    row.attr_vals = `${row.attr_vals} ${row.inputValue}`
-    await editAttributesAPI({
-      id: row.cat_id,
-      attrid: row.attr_id,
-      attr_name: row.attr_name,
-      attr_sel: row.attr_sel,
-      attr_vals: row.attr_vals
-    })
-  }
-  row.inputVisible = false
-  row.inputValue = ''
-}
+//use tags
+const { tableData, InputRef, handleClose, showInput, handleInputConfirm } =
+  useParamsTags()
 </script>
 
 <template>
