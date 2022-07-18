@@ -3,6 +3,9 @@ import { getGoodsListAPI } from '@/api/goods'
 import usePagination from '@/hooks/usePagination'
 import { formatDate } from '@/utils/formatDate'
 import debounce from '@/utils/debounce'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 interface goodsItem<T> {
   total: number
   pagenum: string
@@ -72,6 +75,11 @@ const onSearch = (query: string) => {
     getGoodsList(query)
   }, 500)
 }
+
+//go to editor for adding goods
+const onClick = () => {
+  router.push({ name: 'add' })
+}
 </script>
 
 <template>
@@ -92,6 +100,7 @@ const onSearch = (query: string) => {
     :pSize="pSize"
     :table-data="goodsList"
     @on-search="onSearch"
+    @onClick="onClick"
   ></jy-panel>
 
   <!-- the pagination -->

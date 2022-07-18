@@ -83,7 +83,7 @@ const delConfirmBtn = () => {
 </script>
 
 <template>
-  <el-card class="box-card" style="margin-top: 20px">
+  <el-card style="margin-top: 20px">
     <!-- the head line -->
     <template #header v-if="hasHeader">
       <div class="card-header">
