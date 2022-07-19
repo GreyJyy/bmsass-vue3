@@ -36,6 +36,7 @@ const handleChange = async (val: number[]) => {
     ElMessage.error('请选择三级分类')
     isDisabled.value = true
     value.value = []
+    tableData.value = []
     return
   }
   isDisabled.value = false

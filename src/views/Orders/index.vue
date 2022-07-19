@@ -43,6 +43,7 @@ const tables = [
     :labels="labels"
     :tables="tables"
   ></jy-panel>
+  <el-backtop :right="30" :bottom="100" :visibility-height="100" />
 </template>
 
 <style scoped lang="less"></style>
