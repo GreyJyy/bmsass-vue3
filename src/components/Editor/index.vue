@@ -98,7 +98,6 @@ const handleChange = async (val: number[]) => {
       .filter((item) => item !== '')
       .forEach((item) => checkedTags.value.push(item)) //default check all tags
   })
-  console.log(checkedTags.value)
   //get attrs data
   attributes.value = await getAttributesAPI({
     id: value.value[2],

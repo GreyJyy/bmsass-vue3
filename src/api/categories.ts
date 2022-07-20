@@ -4,7 +4,8 @@ import {
   attributesReq,
   addReq,
   deleteReq,
-  editReq
+  editReq,
+  addCategoriesReq
 } from '@/types/categories'
 
 export const getCategoriesAPI = (params?: categoriesReq) =>
@@ -43,4 +44,11 @@ export const editAttributesAPI = (data: editReq) =>
       attr_sel: data.attr_sel,
       attr_vals: data.attr_vals
     }
+  })
+
+export const addCategoriesAPI = (data: addCategoriesReq) =>
+  request({
+    url: 'categories',
+    method: 'POST',
+    data
   })

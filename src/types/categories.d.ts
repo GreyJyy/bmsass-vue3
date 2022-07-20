@@ -24,3 +24,9 @@ export type deleteReq = {
 export type editReq = addReq & {
   attrid: number
 }
+
+export type addCategoriesReq = {
+  cat_pid: number
+  cat_name: string
+  cat_level: number
+}

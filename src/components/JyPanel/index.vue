@@ -110,7 +110,7 @@ const delConfirmBtn = () => {
       <el-table
         border
         :data="tableData"
-        :row-key="(row) => row.id"
+        :row-key="(row) => row.id || row.cat_id"
         stripe
         style="width: 100%"
       >
@@ -155,7 +155,6 @@ const delConfirmBtn = () => {
             </el-form>
           </template>
         </el-table-column>
-
         <!-- the index column -->
         <el-table-column
           type="index"
@@ -172,6 +171,12 @@ const delConfirmBtn = () => {
           :width="widthList && widthList[index]"
           :label="labels[index]"
         >
+          <template #default="scope" v-if="item === 'cat_deleted'">
+            <el-icon v-if="scope.row.cat_deleted === false" style="color: green"
+              ><CircleCheckFilled
+            /></el-icon>
+            <el-icon v-else style="color: red"><CircleCloseFilled /></el-icon>
+          </template>
           <template #default="scope" v-if="item === 'level'">
             <el-tag
               :type="
@@ -182,6 +187,24 @@ const delConfirmBtn = () => {
                   : 'warning'
               "
               >{{ scope.row.level }}</el-tag
+            >
+          </template>
+          <template #default="scope" v-if="item === 'cat_level'">
+            <el-tag
+              :type="
+                scope.row.cat_level === 0
+                  ? ''
+                  : scope.row.cat_level === 1
+                  ? 'success'
+                  : 'warning'
+              "
+              >{{
+                scope.row.cat_level === 0
+                  ? '一级'
+                  : scope.row.cat_level === 1
+                  ? '二级'
+                  : '三级'
+              }}</el-tag
             >
           </template>
           <template #default="scope" v-if="item === 'pay_status'">
