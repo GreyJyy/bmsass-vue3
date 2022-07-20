@@ -27,7 +27,8 @@
     "unplugin-vue-components": "^0.21.1",
     "vite-plugin-vue-setup-extend": "^0.4.0",
     "vue": "^3.2.25",
-    "vue-router": "^4.1.1"
+    "vue-router": "^4.1.1",
+    "wangeditor": "^4.7.15"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",

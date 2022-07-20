@@ -110,7 +110,7 @@ const delConfirmBtn = () => {
       <el-table
         border
         :data="tableData"
-        row-key="id"
+        :row-key="(row) => row.id"
         stripe
         style="width: 100%"
       >
