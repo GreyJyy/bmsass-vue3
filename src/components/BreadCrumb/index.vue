@@ -2,13 +2,21 @@
 import useStore from '@/store'
 import { storeToRefs } from 'pinia'
 import { ArrowRight } from '@element-plus/icons-vue'
+// import useCollapseToggle from '@/hooks/useCollapseToggle'
 
+// const { isCollapse, activePath, toggleCollapse } = useCollapseToggle()
 const { index, secondIndex } = defineProps<{
   index: number
   secondIndex: number
 }>()
 const { user } = useStore()
 const { menuList } = storeToRefs(user)
+// const toHome = () => {
+//   console.log(isCollapse.value)
+//   console.log(activePath.value)
+//   // console.log(toggleCollapse)
+//   // alert(1)
+// }
 </script>
 
 <template>

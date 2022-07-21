@@ -2,9 +2,18 @@
 import TopBar from '@/layout/components/TopBar/index.vue'
 import SideBar from '@/layout/components/SideBar/index.vue'
 import useCollapseToggle from '@/hooks/useCollapseToggle'
-
+import { useRoute } from 'vue-router'
 //to control the Collapse toggle
 const { isCollapse, activePath, toggleCollapse } = useCollapseToggle()
+const route = useRoute()
+
+//to monitor the path change and cancel the sideBar's high light
+watch(route, () => {
+  if (route.path === '/') {
+    activePath.value = '/'
+    isCollapse.value = true
+  }
+})
 </script>
 
 <template>
