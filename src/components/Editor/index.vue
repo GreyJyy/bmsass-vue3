@@ -214,7 +214,7 @@ const addGoods = async () => {
     >
       <el-tab-pane v-for="(item, index) in labels" :key="index" :label="item">
         <!-- base info -->
-        <div class="step1" v-if="index === 0">
+        <div class="step1" v-show="index === 0">
           <el-form :model="form" ref="ruleFormRef" :rules="rules" status-icon>
             <el-form-item prop="goodsName">
               <el-input
@@ -269,7 +269,7 @@ const addGoods = async () => {
           </div>
         </div>
         <!-- goods params -->
-        <div class="step2" v-if="index === 1">
+        <div class="step2" v-show="index === 1">
           <div class="params" v-for="item in params" :key="item.attr_id">
             <div class="top">{{ item.attr_name }}</div>
             <div class="main">
@@ -287,14 +287,14 @@ const addGoods = async () => {
           </div>
         </div>
         <!-- goods attrs -->
-        <div class="step3" v-if="index === 2">
+        <div class="step3" v-show="index === 2">
           <div class="params" v-for="item in attributes" :key="item.attr_id">
             <div class="top">{{ item.attr_name }}</div>
             <el-input v-model="item.attr_vals" />
           </div>
         </div>
         <!-- image upload -->
-        <div class="step4" v-if="index === 3">
+        <div class="step4" v-show="index === 3">
           <el-upload
             v-model:file-list="fileList"
             action="http://liufusong.top:8888/api/private/v1/upload"
@@ -309,7 +309,7 @@ const addGoods = async () => {
           </el-dialog>
         </div>
         <!-- goods content -->
-        <div class="step5" v-if="index === 4">
+        <div class="step5" v-show="index === 4">
           <div
             id="richText"
             style="height: 400px; background-color: #fff"
